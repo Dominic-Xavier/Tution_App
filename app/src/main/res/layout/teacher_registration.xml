@@ -36,6 +36,7 @@
         app:startIconDrawable="@drawable/user_name">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/teacher_userName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Username" />
@@ -57,6 +58,7 @@
         app:startIconDrawable="@drawable/home_icon">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/teacher_ins_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Institue Name" />
@@ -80,10 +82,11 @@
         app:startIconDrawable="@drawable/phone_number_icon">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/teacher_phone_number"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Phone Number"
-            android:inputType="phone" />
+            android:inputType="phone"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -102,6 +105,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/teacher_pass"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Password"
@@ -124,6 +128,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/teacher_confirm_pass"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Confirm Password"
@@ -132,6 +137,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/teacher_reg_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"

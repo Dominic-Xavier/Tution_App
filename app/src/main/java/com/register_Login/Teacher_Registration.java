@@ -41,6 +41,7 @@ public class Teacher_Registration extends AppCompatActivity {
             str_password = password.getText().toString();
             conf_password = confirmPassword.getText().toString();
             rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference();
 
             if(str_password.equals(conf_password)) {
                 Toast.makeText(this, "Password Matches", Toast.LENGTH_SHORT).show();

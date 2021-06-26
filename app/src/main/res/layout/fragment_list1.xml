@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".list1">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/all_students"
+                android:layout_width="match_parent"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/box_button"
+                android:drawableTop="@drawable/icons8_students_64"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:text="All Students" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/add_sub"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/box_button"
+                android:drawableTop="@drawable/add_subject"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:text="Add Subject" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/fee_details"
+                android:layout_width="match_parent"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/box_button"
+                android:drawableTop="@drawable/student_fees"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:text="   Fee Details  " />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/add_teacher"
+                android:layout_width="match_parent"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/box_button"
+                android:drawableTop="@drawable/add_teacher"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:text="Add Teacher" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/students_report"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/box_button"
+                android:drawableTop="@drawable/student_progression_1"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:text="Students Progress" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/attendence"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/box_button"
+                android:drawableTop="@drawable/attendence"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:text="Attendence" />
+
+        </TableRow>
+
+    </TableLayout>
+
+</FrameLayout>

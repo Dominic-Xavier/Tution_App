@@ -36,7 +36,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="50dp"
-        android:hint="Username"
+        android:hint="Owner ID"
         app:startIconDrawable="@drawable/user_name"
         app:counterMaxLength="20"
         app:counterEnabled="true"

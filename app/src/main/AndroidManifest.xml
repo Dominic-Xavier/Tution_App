@@ -9,7 +9,7 @@
         android:roundIcon="@drawable/pngtree_school_education_logo_png_image_4136147"
         android:supportsRtl="true"
         android:theme="@style/Theme.TutionApp">
-        <activity android:name="com.tutionapp.TutionActivity">
+        <activity android:name="com.register_Login.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +21,7 @@
         <activity android:name="com.register_Login.Student_Registration"/>
         <activity android:name="com.register_Login.Teacher_Registration"/>
         <activity android:name="com.register_Login.WhoAreYou"/>
-        <activity android:name="com.register_Login.Registeration"/>
+        <activity android:name="com.tutionapp.TutionActivity"/>
     </application>
 
 </manifest>

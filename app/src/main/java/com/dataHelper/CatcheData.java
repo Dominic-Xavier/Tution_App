@@ -1,4 +1,4 @@
-package com.sqlOperations;
+package com.dataHelper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -20,7 +20,7 @@ public class CatcheData {
         edit.putString(key,value);
         boolean save_data = edit.commit();
         if(save_data)
-            Toast.makeText(context,"Data Saved Successfully...!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"Data Saved in sharedpreference...!", Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(context,"Data Saving Failed...!", Toast.LENGTH_SHORT).show();
     }
@@ -38,8 +38,8 @@ public class CatcheData {
 
     public static String getData(String key){
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        if(key.equals("u_id"))
-            return sharedPreferences.getString("u_id",null);
+        if(key.equals("Ins_id"))
+            return sharedPreferences.getString("Ins_id",null);
         return null;
     }
 }

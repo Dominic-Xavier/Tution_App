@@ -7,14 +7,9 @@ import android.widget.Toast;
 
 public class CatcheData {
 
-    static Context context;
     private static SharedPreferences sharedPreferences;
 
-    public CatcheData(Context context){
-        this.context = context;
-    }
-
-    public static void setData(String key, String value){
+    public static void setData(String key, String value, Context context){
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = sharedPreferences.edit();
         edit.putString(key,value);
@@ -25,18 +20,22 @@ public class CatcheData {
             Toast.makeText(context,"Data Saving Failed...!", Toast.LENGTH_SHORT).show();
     }
 
-    public static void delete_data(){
+    public static boolean delete_data(Context context){
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = sharedPreferences.edit();
-        edit.remove("u_id");
+        edit.clear();
         boolean delete_data = edit.commit();
-        if(delete_data)
+        if(delete_data){
             Toast.makeText(context,"Data deleted Successfully...!", Toast.LENGTH_SHORT).show();
-        else
+            return delete_data;
+        }
+        else{
             Toast.makeText(context,"Data did not deleted...!", Toast.LENGTH_SHORT).show();
+            return delete_data;
+        }
     }
 
-    public static String getData(String key){
+    public static String getData(String key, Context context){
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if(key.equals("Ins_id"))
             return sharedPreferences.getString("Ins_id",null);

@@ -39,6 +39,22 @@
         android:minHeight="100dp"
         android:text="Add Parent" />
     </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/logout"
+                android:layout_width="match_parent"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/box_button"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:text="Logout" />
+
+        </TableRow>
     </TableLayout>
 
 </FrameLayout>

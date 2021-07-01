@@ -18,13 +18,12 @@ public class AlertOrToastMsg {
         Toast.makeText(context, Message, Toast.LENGTH_SHORT).show();
     }
 
-    public AlertDialog showAlert(String title, String message){
+    public void showAlert(String title, String message){
         alertDialog = new AlertDialog.Builder(context);
         alertDialog.setTitle(title)
                 .setMessage(message)
                 .setPositiveButton("Ok",null);
         dialog = alertDialog.create();
         dialog.show();
-        return dialog;
     }
 }

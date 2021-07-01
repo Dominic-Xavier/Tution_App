@@ -38,7 +38,6 @@ public class Login extends AppCompatActivity {
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private AlertOrToastMsg alertOrToastMsg;
-    private DatabaseReference reference;
     private Data_Manipulation dataManipulation = new Data_Manipulation(this);
     private Handler handler;
 
@@ -53,11 +52,10 @@ public class Login extends AppCompatActivity {
         password = (TextInputEditText)findViewById(R.id.txt_Pass);
         radioGroup = findViewById(R.id.category);
         alertOrToastMsg = new AlertOrToastMsg(this);
-        reference = FirebaseDatabase.getInstance("https://tutor-project-1cc32-default-rtdb.firebaseio.com/").getReference().child("Institutes");
 
         handler = new Handler();
         handler.postAtFrontOfQueue(() -> {
-            String data = CatcheData.getData("Ins_id");
+            String data = CatcheData.getData("Ins_id", this);
             if(data!=null){
                 startActivity(new Intent(Login.this, TutionActivity.class));
                 finish();

@@ -1,15 +1,21 @@
 package com.tutionapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.dataHelper.CatcheData;
+import com.register_Login.Login;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +27,8 @@ public class TutionActivity extends AppCompatActivity {
     private PagerAdapter pagerAdapter;
     private TextView[] dots;
     private LinearLayout dotsLayout;
+    private AlertDialog.Builder alertDialog;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,5 +85,23 @@ public class TutionActivity extends AppCompatActivity {
             dotsLayout.addView(dots[i]);
             dots[0].setTextColor(Color.BLUE);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+            alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Logout")
+                    .setMessage("Are you sure?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if(CatcheData.delete_data(getApplicationContext())){
+                                startActivity(new Intent(getApplicationContext(), Login.class));
+                            }
+                        }
+                    })
+                    .setNegativeButton("No",null);
+            dialog = alertDialog.create();
+            dialog.show();
     }
 }

@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.dataHelper.Data_Manipulation;
+import com.dataHelper.Node;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -50,7 +51,7 @@ public class Teacher_Registration extends AppCompatActivity {
                 map.put("MobileNumber",str_mobileNumber);
                 map.put("Password",str_password);
 
-                dataManipulation.storeInstituteData(map);
+                dataManipulation.fetchNoOfCurrentNode(Node.Institutes, map);
                 Toast.makeText(this, "Password Matches", Toast.LENGTH_SHORT).show();
             }
             else

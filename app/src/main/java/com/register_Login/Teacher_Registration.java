@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.dataHelper.Data_Manipulation;
+import com.dataHelper.Register_LoginOperations;
 import com.dataHelper.Node;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.tutionapp.R;
 
 import java.util.HashMap;
@@ -22,7 +20,7 @@ public class Teacher_Registration extends AppCompatActivity {
     private Button register;
     private TextInputEditText ownerName, instute_name, mobileNumber, password, confirmPassword;
     private String str_ownerName, str_instudeName, str_mobileNumber, str_password, conf_password;
-    private Data_Manipulation dataManipulation = new Data_Manipulation(this);
+    private Register_LoginOperations dataManipulation = new Register_LoginOperations(this);
     private Map<String, Object> map = new HashMap<>();
 
     @Override

@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,7 +22,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:text="Tutor App"
         android:textSize="50dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,53 +30,99 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/student_login_id"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:id="@+id/txt_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="50dp"
-        android:hint="Owner ID"
-        app:startIconDrawable="@drawable/user_name"
-        app:counterMaxLength="20"
-        app:counterEnabled="true"
+        android:hint="Student ID"
         android:inputType="textPersonName"
         app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" >
+        app:layout_constraintTop_toBottomOf="@+id/ind_id"
+        app:startIconDrawable="@drawable/user_name">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/student_login_ID"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLength="10" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/parentsID"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="Parent ID"
+        android:inputType="textPersonName"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/student_login_id"
+        app:startIconDrawable="@drawable/user_name">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/parentID"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLength="10" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ind_id"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="Institute ID"
+        android:inputType="textPersonName"
+        app:counterEnabled="true"
+        app:counterMaxLength="10"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:startIconDrawable="@drawable/user_name">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txt_user"
             android:layout_width="match_parent"
-            android:maxLength="10"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:maxLength="10" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/txt_password"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:hint="Password"
-        app:counterMaxLength="10"
         app:counterEnabled="true"
+        app:counterMaxLength="10"
         app:endIconMode="password_toggle"
-        app:startIconDrawable="@drawable/password_key"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_username">
+        app:layout_constraintTop_toBottomOf="@+id/parentsID"
+        app:startIconDrawable="@drawable/password_key">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txt_Pass"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:maxLength="20"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:maxLength="20" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

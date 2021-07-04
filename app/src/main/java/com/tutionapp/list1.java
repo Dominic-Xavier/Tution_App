@@ -1,13 +1,20 @@
 package com.tutionapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
+import com.owner.AllStudentsList;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,7 +23,7 @@ import android.widget.Button;
  */
 public class list1 extends Fragment {
 
-    Button logout;
+    private AppCompatButton allStudents, addSubject, FeeDetails, addTeacher, studentPregress, attendence;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -50,16 +57,18 @@ public class list1 extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        allStudents = getView().findViewById(R.id.all_students);
+        allStudents.setOnClickListener((v) -> {
+            startActivity(new Intent(getActivity(), AllStudentsList.class));
+        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.teacher_list1, container, false);
     }
 }

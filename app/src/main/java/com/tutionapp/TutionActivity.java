@@ -89,19 +89,17 @@ public class TutionActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-            alertDialog = new AlertDialog.Builder(this);
-            alertDialog.setTitle("Logout")
-                    .setMessage("Are you sure?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            if(CatcheData.delete_data(getApplicationContext())){
-                                startActivity(new Intent(getApplicationContext(), Login.class));
-                            }
-                        }
-                    })
-                    .setNegativeButton("No",null);
-            dialog = alertDialog.create();
-            dialog.show();
+        alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Logout")
+                .setMessage("Are you sure?")
+                .setPositiveButton("Yes", (dialogInterface,i)-> {
+                    if(CatcheData.delete_data(getApplicationContext())){
+                        startActivity(new Intent(getApplicationContext(), Login.class));
+                        finish();
+                    }
+                })
+                .setNegativeButton("No",null);
+        dialog = alertDialog.create();
+        dialog.show();
     }
 }

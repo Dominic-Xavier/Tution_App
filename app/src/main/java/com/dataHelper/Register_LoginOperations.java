@@ -13,18 +13,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.register_Login.Login;
+import com.register_Login.Student;
 import com.tutionapp.TutionActivity;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class Data_Manipulation {
+public class Register_LoginOperations {
     private AlertOrToastMsg alertOrToastMsg;
     private static long noOfChildNodes, noOfInstituteNodes = 0;
     private FirebaseDatabase rootNode;
@@ -32,9 +34,11 @@ public class Data_Manipulation {
     private Map<String, Object> map;
     private Context context;
     private String MobileNumber, OwnerName, Institute_Name, ins_id, Password;
-    private boolean verifyHasNode = false;
+    private static boolean verifyHasNode = false;
+    static String hasChild, keyValue;
 
-    public Data_Manipulation(Context context){
+
+    public Register_LoginOperations(Context context){
         this.context = context;
         alertOrToastMsg = new AlertOrToastMsg(context);
         rootNode = FirebaseDatabase.getInstance("https://tutor-project-1cc32-default-rtdb.firebaseio.com/");
@@ -54,17 +58,17 @@ public class Data_Manipulation {
             }
 
             case Parent:{
-                createChildNode("", Node.Parent);
+                createParentNode();
                 break;
             }
 
             case Teacher:{
-                createChildNode("", Node.Teacher);
+                createChildNode("", Node.Teacher, map);
                 break;
             }
 
             case Student:{
-                createChildNode(map.get("Ins_ID").toString(), Node.Student);
+                createChildNode(map.get("Ins_ID").toString(), Node.Student, map);
                 break;
             }
 
@@ -74,23 +78,57 @@ public class Data_Manipulation {
         }
     }
 
-    private void createChildNode(String ins_id, Node nodeName) {
+    private void createChildNode(String ins_id, Node nodeName, Map<String, Object> map) {
+
+        if(!validateIns_InstituteID(ins_id)){
+            alertOrToastMsg.ToastMsg("Invalid Institute ID");
+            return;
+        }
+        else
+            alertOrToastMsg.ToastMsg("valid Institute ID");
+
+        switch (nodeName){
+            case Student:{
+                hasChild = "Stu_id_1";
+                keyValue = "Stu_id_";
+                break;
+            }
+
+            case Teacher:{
+                hasChild = "Tech_id_1";
+                keyValue = "Tech_id_";
+                break;
+            }
+
+            case Parent:{
+                hasChild = "Par_id_1";
+                keyValue = "Par_id_";
+                break;
+            }
+        }
+
         Institute_Reference.child(ins_id).child(nodeName.toString()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild("Stu_id_1")){
+                if (dataSnapshot.hasChild(hasChild)){
+
                     noOfChildNodes = dataSnapshot.getChildrenCount();
-                    map.put("Student_ID", "Stu_id_"+noOfChildNodes);
-                    Institute_Reference.child("").setValue(map, new DatabaseReference.CompletionListener() {
+                    long nodeCout = noOfChildNodes+1;
+                    map.put("Student ID", keyValue+nodeCout);
+                    Institute_Reference.child(ins_id).child(nodeName.toString()).child(map.get("ID").toString()).setValue(map, new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError databaseError, @NonNull @NotNull DatabaseReference databaseReference) {
-                            if(databaseReference.getKey().equals(map.get("Student_ID")))
+                            if(databaseReference.getKey().equals(map.get("Student ID")))
                                 alertOrToastMsg.ToastMsg("Values inserted successfully");
+                            else{
+                                alertOrToastMsg.ToastMsg(databaseError.toString());
+                                alertOrToastMsg.ToastMsg("Invalid Institute ID");
+                            }
                         }
                     });
                 }
                 else
-                    DoinitialPreocess(Node.Student, ins_id);
+                    DoinitialPreocess(nodeName, ins_id, map);
 
             }
 
@@ -162,20 +200,16 @@ public class Data_Manipulation {
         });
     }
 
-    private void DoinitialPreocess(Node node, String Ins_id){
+    private void DoinitialPreocess(Node node, String Ins_id, Map<String, Object> map){
 
-        if(validateIns_InstituteID(Ins_id)==false){
-            alertOrToastMsg.ToastMsg("Invalid Institute ID");
-            return;
-        }
-
-        reference.child(Node.Institutes.toString()).child(Ins_id).addValueEventListener(new ValueEventListener() {
+        Institute_Reference.child(Ins_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                 map.put("Student_ID","Stu_id_1");
                 for (DataSnapshot snapshot:dataSnapshot.getChildren()){
                     String keys = snapshot.getKey();
-                    if(keys.equals(Ins_id)){
+                    System.out.println("Student keys:-"+keys);
+                    if(!keys.equals(Ins_id)){
                         Institute_Reference.child(Ins_id).child(node.toString()).child("Stu_id_1").setValue(map, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError databaseError, @NonNull @NotNull DatabaseReference databaseReference) {
@@ -235,7 +269,7 @@ public class Data_Manipulation {
                     else
                         alertOrToastMsg.ToastMsg("User ID or Password id incorrect...!");
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    alertOrToastMsg.showAlert("Json Error", e.getMessage());
                 }
             }
 
@@ -248,7 +282,7 @@ public class Data_Manipulation {
 
     private boolean validateIns_InstituteID(String ins_id){
 
-        Institute_Reference.addValueEventListener(new ValueEventListener() {
+        Institute_Reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                 System.out.println("My Key is:-"+ins_id);
@@ -260,8 +294,9 @@ public class Data_Manipulation {
                         verifyHasNode = true;
                         break;
                     }
+                    else
+                        verifyHasNode = false;
                 }
-
             }
 
             @Override
@@ -269,7 +304,73 @@ public class Data_Manipulation {
                 alertOrToastMsg.showAlert("validateIns_InstituteID Error", databaseError.toString());
                 verifyHasNode = false;
             }
+
         });
+        System.out.println("verifyHasNode:-"+verifyHasNode);
         return verifyHasNode;
+    }
+
+    private void createParentNode(){
+
+        Institute_Reference.child(map.get("parentInsID").toString()).child(Node.Student.toString())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChild(map.get("parentStudentID").toString())){
+                            long count = dataSnapshot.getChildrenCount()+1;
+                            map.put("ParentID", "par_id_"+count);
+                            alertOrToastMsg.ToastMsg("Valid Ins ID and student ID");
+                            Institute_Reference.child(map.get("parentInsID").toString()).child(Node.Student.toString()).child(map.get("parentStudentID").toString())
+                                    .updateChildren(map, new DatabaseReference.CompletionListener() {
+                                        @Override
+                                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError databaseError, @NonNull @NotNull DatabaseReference databaseReference) {
+                                            if(databaseReference.getKey().equals(map.get("parentStudentID")))
+                                                alertOrToastMsg.ToastMsg("Value is inserted successfully");
+                                            else
+                                                alertOrToastMsg.ToastMsg("Error in inserting value...!");
+                                        }
+                                    });
+                        }
+                        else
+                            alertOrToastMsg.ToastMsg("Invalid Ins ID or Student ID");
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
+                        alertOrToastMsg.ToastMsg(databaseError.toString());
+                    }
+                });
+    }
+
+    public void validateUserCredentials(String ins_id, String Student_ID, String pass){
+
+        Institute_Reference.child(ins_id).child(Node.Student.toString()).child(Student_ID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Object obj = dataSnapshot.getValue();
+                try {
+                    JSONObject jsonObject = new JSONObject(obj.toString());
+                    System.out.println("Values are:-"+jsonObject);
+                    String StudentID = jsonObject.getString("Student_ID");
+                    String Ins_ID = jsonObject.getString("Ins_ID");
+                    String passWord = jsonObject.getString("Password");
+                    if(Student_ID.equals(StudentID) && ins_id.equals(Ins_ID) && pass.equals(passWord)){
+                        context.startActivity(new Intent(context, Student.class));
+                        ((Activity)context).finish();
+                    }
+                    else
+                        alertOrToastMsg.ToastMsg("Invalid Stu ID or Ins ID or Password...!");
+                } catch (JSONException e) {
+                    alertOrToastMsg.showAlert("Json Exception", e.getMessage());
+                } catch (NullPointerException n){
+                    alertOrToastMsg.ToastMsg("Invalid Student or Institute id..!");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
+                alertOrToastMsg.ToastMsg(databaseError.toString());
+            }
+        });
     }
 }

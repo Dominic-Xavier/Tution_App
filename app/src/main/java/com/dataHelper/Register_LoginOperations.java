@@ -114,11 +114,11 @@ public class Register_LoginOperations {
 
                     noOfChildNodes = dataSnapshot.getChildrenCount();
                     long nodeCout = noOfChildNodes+1;
-                    map.put("Student ID", keyValue+nodeCout);
-                    Institute_Reference.child(ins_id).child(nodeName.toString()).child(map.get("ID").toString()).setValue(map, new DatabaseReference.CompletionListener() {
+                    map.put("Student_ID", keyValue+nodeCout);
+                    Institute_Reference.child(ins_id).child(nodeName.toString()).child(map.get("Student_ID").toString()).setValue(map, new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError databaseError, @NonNull @NotNull DatabaseReference databaseReference) {
-                            if(databaseReference.getKey().equals(map.get("Student ID")))
+                            if(databaseReference.getKey().equals(map.get("Student_ID")))
                                 alertOrToastMsg.ToastMsg("Values inserted successfully");
                             else{
                                 alertOrToastMsg.ToastMsg(databaseError.toString());

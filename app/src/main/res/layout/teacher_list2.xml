@@ -40,21 +40,22 @@
         android:text="Add Parent" />
     </TableRow>
 
-        <TableRow
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/assignTask"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginRight="15dp"
+            android:background="@drawable/box_button"
+            android:minWidth="100dp"
+            android:minHeight="100dp"
+            android:drawableTop="@drawable/assign_task"
+            android:text="Assign Task" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/logout"
-                android:layout_width="match_parent"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/box_button"
-                android:minWidth="100dp"
-                android:minHeight="100dp"
-                android:text="Logout" />
-
-        </TableRow>
+    </TableRow>
     </TableLayout>
 
 </FrameLayout>

@@ -1,5 +1,6 @@
 package com.owner;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.alertOrToast.AlertOrToastMsg;
@@ -11,6 +12,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tutionapp.R;
+import com.tutionapp.StudentDetailsActivity;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -33,11 +35,9 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
 
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
-    private static Set<String> studentNames = new HashSet<>();
-    private static Set<String> studentPhoneNumbers = new HashSet<>();
     private static AlertOrToastMsg alertOrToastMsg;
-    private static Map<String, Set<String>> map = new HashMap<>();
-    private List<String> stu_Names;
+    private static Map<String, List<String>> map = new HashMap<>();
+    List<String> all_student_IDs;
     private static final DatabaseReference reference = FirebaseDatabase.getInstance("https://tutor-project-1cc32-default-rtdb.firebaseio.com/").getReference()
             .child(Node.Institutes.toString());
 
@@ -49,9 +49,10 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
         String ins_id = CatcheData.getData("Ins_id", this);
         alertOrToastMsg = new AlertOrToastMsg(this);
 
-        Map<String, Set<String>> maps = getNamesAndPhoneNumbers(ins_id);
-        Set<String> names = maps.get("StudentNames");
-        Set<String> phoneNumbers = maps.get("StudentPhoneNumbers");
+        Map<String, List<String>> maps = getNamesAndPhoneNumbers(ins_id);
+        List<String> names = maps.get("StudentNames");
+        List<String> phoneNumbers = maps.get("StudentPhoneNumbers");
+        all_student_IDs = maps.get("Student_IDs");
 
         recyclerView = findViewById(R.id.recyclerView);
 
@@ -59,35 +60,30 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
             recyclerViewAdapter = new RecyclerViewAdapter(this, names, phoneNumbers, this::onClick);
             recyclerView.setAdapter(recyclerViewAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            stu_Names = new ArrayList<>(names);
         }
     }
 
-    private static Map<String, Set<String>> getNamesAndPhoneNumbers(String ins_id){
+    private static Map<String, List<String>> getNamesAndPhoneNumbers(String ins_id){
 
         reference.child(ins_id).child(Node.Student.toString()).child("")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                        int count = 0;
-                        JSONObject jsonObject;
+                        List<String> studentNames = new ArrayList<>();
+                        List<String> studentPhoneNumbers = new ArrayList<>();
+                        List<String> studentIDs = new ArrayList<>();
                         System.out.println("Student Lists:-"+dataSnapshot.getValue());
                         for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                            Object allStudentData = snapshot.getValue();
-                            try {
-                                jsonObject = new JSONObject(allStudentData.toString());
-                                String Names = jsonObject.getString("StudentName");
-                                String phone_Number = jsonObject.getString("PhoneNumber");
-                                studentPhoneNumbers.add(phone_Number);
-                                studentNames.add(Names);
-                            }
-                            catch (NullPointerException | JSONException n){
-                                alertOrToastMsg.showAlert("Exception", n.getMessage());
-                                break;
-                            }
+                            String Names = snapshot.child("StudentName").getValue(String.class);
+                            String phone_Number = snapshot.child("PhoneNumber").getValue(String.class);
+                            String student_ID = snapshot.child("Student_ID").getValue(String.class);
+                            studentNames.add(Names);
+                            studentPhoneNumbers.add(phone_Number);
+                            studentIDs.add(student_ID);
                         }
                         map.put("StudentNames", studentNames);
                         map.put("StudentPhoneNumbers", studentPhoneNumbers);
+                        map.put("Student_IDs", studentIDs);
                         System.out.println("Map is:-"+map);
                     }
 
@@ -102,8 +98,11 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
 
     @Override
     public void onClick(int position) {
-        String Name = stu_Names.get(position);
-        alertOrToastMsg.ToastMsg("Clicked "+Name);
+        String ids = all_student_IDs.get(position);
+        alertOrToastMsg.ToastMsg(ids);
+        Intent intent = new Intent(this, StudentDetailsActivity.class);
+        intent.putExtra("studentID", ids);
+        startActivity(intent);
     }
 
     @Override

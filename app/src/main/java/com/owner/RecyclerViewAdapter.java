@@ -21,18 +21,15 @@ import androidx.recyclerview.widget.RecyclerView;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.Viewholders> {
 
     private Context context;
-    private Set<String> students, studentsPhoneNumbers;
-    private List<String> studentNames, studentNubers;
+    private List<String> students, studentsPhoneNumbers;
 
     private OnStudentListner onStudentListner;
 
-    public RecyclerViewAdapter(Context context, Set<String> students, Set<String> studentsPhoneNumbers, OnStudentListner onStudentListner){
+    public RecyclerViewAdapter(Context context, List<String> students, List<String> studentsPhoneNumbers, OnStudentListner onStudentListner){
         this.context = context;
         this.students = students;
         this.studentsPhoneNumbers = studentsPhoneNumbers;
         this.onStudentListner = onStudentListner;
-        studentNames = new ArrayList<>(students);
-        studentNubers = new ArrayList<>(studentsPhoneNumbers);
     }
 
     @NonNull
@@ -46,8 +43,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull RecyclerViewAdapter.Viewholders holder, int position) {
-        holder.studentName.setText(studentNames.get(position));
-        holder.phoneNumber.setText(studentNubers.get(position));
+        holder.studentName.setText(students.get(position));
+        holder.phoneNumber.setText(studentsPhoneNumbers.get(position));
     }
 
     @Override

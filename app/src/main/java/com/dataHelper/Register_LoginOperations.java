@@ -246,32 +246,23 @@ public class Register_LoginOperations {
         Institute_Reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                Object data = dataSnapshot.getValue();
-                System.out.println("Login Data:-"+data);
-                if(data==null){
+                String Instutute_id = dataSnapshot.child("ins_id").getValue(String.class);
+                String passWord = dataSnapshot.child("Password").getValue(String.class);
+
+                System.out.println("Login Data:-"+Instutute_id+" : "+passWord);
+                if(Instutute_id==null){
                     alertOrToastMsg.ToastMsg("User ID or Password id incorrect...!");
                     return;
                 }
-                try {
-                    JSONObject jobj = new JSONObject(data.toString());
-                    System.out.println("Login Data in json:-"+jobj);
-                    MobileNumber = jobj.getString("MobileNumber");
-                    OwnerName = jobj.getString("OwnerName");
-                    Institute_Name = jobj.getString("Institute_Name");
-                    ins_id = jobj.getString("ins_id");
-                    Password = jobj.getString("Password");
 
-                    if(password.equals(Password) && userID.equals(ins_id)){
-                        context.startActivity(new Intent(context, TutionActivity.class));
-                        CatcheData.setData("Ins_id",ins_id, context);
-                        ((Activity)context).finish();
-                    }
-                    else
-                        alertOrToastMsg.ToastMsg("User ID or Password id incorrect...!");
-                } catch (JSONException e) {
-                    alertOrToastMsg.showAlert("Json Error", e.getMessage());
+                if(password.equals(passWord) && userID.equals(Instutute_id)){
+                    context.startActivity(new Intent(context, TutionActivity.class));
+                    CatcheData.setData("Ins_id",Instutute_id, context);
+                    ((Activity)context).finish();
                 }
-            }
+                else
+                    alertOrToastMsg.ToastMsg("User ID or Password is incorrect...!");
+                }
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {

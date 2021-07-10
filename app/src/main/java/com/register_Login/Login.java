@@ -18,6 +18,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.student.Student;
 import com.tutionapp.R;
 import com.tutionapp.TutionActivity;
 
@@ -62,31 +63,18 @@ public class Login extends AppCompatActivity {
         handler = new Handler();
         handler.postAtFrontOfQueue(() -> {
             String data = CatcheData.getData("Ins_id", this);
-            if(data!=null){
+            if(data!=null && data.contains("Ins_id")){
                 startActivity(new Intent(Login.this, TutionActivity.class));
+                finish();
+            }
+            else if(data!=null && data.contains("Stu_id")){
+                startActivity(new Intent(Login.this, Student.class));
                 finish();
             }
         });
 
-        username.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(editable.toString().trim().contains("Ins_id_"))
-                    username.setError(null);
-                else
-                    username.setError("Invalid Institute ID");
-            }
-        });
+        username.addTextChangedListener(new GenericTextWatcher(username));
+        student_ID.addTextChangedListener(new GenericTextWatcher(student_ID));
 
         register.setOnClickListener((view) -> {
             startActivity(new Intent(Login.this, WhoAreYou.class));
@@ -148,14 +136,47 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    private void checkedButton(View v){
-        int id = radioGroup.getCheckedRadioButtonId();
-        radioButton = findViewById(id);
-
-    }
-
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    //Implementing Single TextWatcher
+    private class GenericTextWatcher implements TextWatcher{
+        View view;
+        public GenericTextWatcher(View view){
+            this.view = view;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            String text = editable.toString();
+            switch (view.getId()){
+                case R.id.txt_user:{
+                    if(text.contains("Ins_id_"))
+                        username.setError(null);
+                    else
+                        username.setError("Invalid Institute ID");
+                    break;
+                }
+                case R.id.student_login_ID:{
+                    if(text.contains("Stu_id_"))
+                        student_ID.setError(null);
+                    else
+                        student_ID.setError("Invalid Student ID");
+                    break;
+                }
+            }
+        }
     }
 }

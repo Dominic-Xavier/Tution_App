@@ -3,6 +3,8 @@ package com.tutionapp;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
@@ -12,7 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.dataHelper.CatcheData;
+import com.owner.AllStudentsList;
 import com.register_Login.Login;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +26,7 @@ import com.register_Login.Login;
  */
 public class list2 extends Fragment {
 
-    private Button assignTask;
+    private AppCompatButton assignTask;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,12 +60,12 @@ public class list2 extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         assignTask = getView().findViewById(R.id.assignTask);
-
-
+        assignTask.setOnClickListener((v)-> {
+            startActivity(new Intent(getActivity(), AllStudentsList.class));
+        });
     }
 
     @Override

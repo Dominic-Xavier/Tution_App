@@ -1,7 +1,6 @@
 package com.dataHelper;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 
@@ -10,17 +9,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.register_Login.Login;
-import com.register_Login.Student;
+import com.student.Student;
 import com.tutionapp.TutionActivity;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -248,7 +244,6 @@ public class Register_LoginOperations {
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                 String Instutute_id = dataSnapshot.child("ins_id").getValue(String.class);
                 String passWord = dataSnapshot.child("Password").getValue(String.class);
-
                 System.out.println("Login Data:-"+Instutute_id+" : "+passWord);
                 if(Instutute_id==null){
                     alertOrToastMsg.ToastMsg("User ID or Password id incorrect...!");
@@ -340,21 +335,20 @@ public class Register_LoginOperations {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Object obj = dataSnapshot.getValue();
                 try {
-                    JSONObject jsonObject = new JSONObject(obj.toString());
-                    System.out.println("Values are:-"+jsonObject);
-                    String StudentID = jsonObject.getString("Student_ID");
-                    String Ins_ID = jsonObject.getString("Ins_ID");
-                    String passWord = jsonObject.getString("Password");
+                    String StudentID = dataSnapshot.child("Student_ID").getValue(String.class);
+                    String Ins_ID = dataSnapshot.child("Ins_ID").getValue(String.class);
+                    String passWord = dataSnapshot.child("Password").getValue(String.class);
+                    System.out.println("");
                     if(Student_ID.equals(StudentID) && ins_id.equals(Ins_ID) && pass.equals(passWord)){
+                        CatcheData.setData("Stu_id",StudentID, context);
                         context.startActivity(new Intent(context, Student.class));
                         ((Activity)context).finish();
                     }
                     else
                         alertOrToastMsg.ToastMsg("Invalid Stu ID or Ins ID or Password...!");
-                } catch (JSONException e) {
-                    alertOrToastMsg.showAlert("Json Exception", e.getMessage());
-                } catch (NullPointerException n){
-                    alertOrToastMsg.ToastMsg("Invalid Student or Institute id..!");
+                }
+                catch (Exception e){
+                    alertOrToastMsg.showAlert("Error", e.getMessage());
                 }
             }
 

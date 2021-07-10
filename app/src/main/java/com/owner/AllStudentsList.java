@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.alertOrToast.AlertOrToastMsg;
+import com.common.RecyclerViewAdapter;
 import com.dataHelper.CatcheData;
 import com.dataHelper.Node;
 import com.google.firebase.database.DataSnapshot;
@@ -15,15 +16,11 @@ import com.tutionapp.R;
 import com.tutionapp.StudentDetailsActivity;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,8 +35,8 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
     private static AlertOrToastMsg alertOrToastMsg;
     private static Map<String, List<String>> map = new HashMap<>();
     List<String> all_student_IDs;
-    private static final DatabaseReference reference = FirebaseDatabase.getInstance("https://tutor-project-1cc32-default-rtdb.firebaseio.com/").getReference()
-            .child(Node.Institutes.toString());
+    private static final DatabaseReference reference = FirebaseDatabase.getInstance("https://tutor-project-1cc32-default-rtdb.firebaseio.com/")
+            .getReference().child(Node.Institutes.toString());
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {

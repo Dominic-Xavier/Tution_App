@@ -1,4 +1,4 @@
-package com.tutionapp;
+package com.common;
 
 
 import org.jetbrains.annotations.NotNull;

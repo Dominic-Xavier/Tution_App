@@ -1,14 +1,9 @@
-package com.tutionapp;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+package com.student;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,37 +11,42 @@ import android.widget.TextView;
 import com.common.SlideViews;
 import com.dataHelper.CatcheData;
 import com.register_Login.Login;
+import com.tutionapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TutionActivity extends AppCompatActivity {
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
-    private ViewPager viewPager;
-    private List<Fragment> fragmentlist;
-    private PagerAdapter pagerAdapter;
-    private TextView[] dots;
-    private LinearLayout dotsLayout;
-    private AlertDialog.Builder alertDialog;
+public class Student extends AppCompatActivity {
+
     private AlertDialog dialog;
+    private AlertDialog.Builder alertDialog;
+    private ViewPager viewPager;
+    private SlideViews slideViews;
+    private List<Fragment> fragmentList;
+    private TextView[] dots;
+    private LinearLayoutCompat dotsLayout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tution_activity);
+        setContentView(R.layout.student_activity);
 
-        fragmentlist = new ArrayList<>();
-        fragmentlist.add(new list1());
-        fragmentlist.add(new list2());
-        fragmentlist.add(new list3());
+        fragmentList = new ArrayList<>();
+        fragmentList.add(new StudentList1());
+        dotsLayout = findViewById(R.id.student_dots);
+        viewPager = findViewById(R.id.student_view_pager);
 
-        viewPager = findViewById(R.id.slide_view);
-        dotsLayout = findViewById(R.id.dots_container);
-        pagerAdapter = new SlideViews(getSupportFragmentManager(), fragmentlist);
+        slideViews = new SlideViews(getSupportFragmentManager(), fragmentList);
+        viewPager.setAdapter(slideViews);
 
-        dots = new TextView[fragmentlist.size()];
-
-        viewPager.setAdapter(pagerAdapter);
+        dots = new TextView[fragmentList.size()];
 
         dotsIndicator();
 

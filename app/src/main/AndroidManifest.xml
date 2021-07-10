@@ -24,7 +24,7 @@
         <activity android:name="com.register_Login.Teacher_Registration" />
         <activity android:name="com.register_Login.WhoAreYou" />
         <activity android:name=".TutionActivity" />
-        <activity android:name="com.register_Login.Student" />
+        <activity android:name="com.student.Student" />
         <activity android:name="com.owner.AllStudentsList" />
         <activity
             android:name="com.register_Login.OTPValidation"

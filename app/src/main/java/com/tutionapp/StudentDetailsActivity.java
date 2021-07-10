@@ -54,27 +54,20 @@ public class StudentDetailsActivity extends AppCompatActivity {
         student_reference.child(stu_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                Object add_datas = dataSnapshot.getValue();
-                System.out.println("All Datas:-"+add_datas);
-                try {
-                    jobj = new JSONObject(add_datas.toString());
-                    System.out.println("JsonObj:-"+jobj);
-                    String stu_id = jobj.getString("Student_ID");
-                    String ClassName = jobj.getString("ClassName");
-                    String PhoneNumber = jobj.getString("PhoneNumber");
-                    String SchoolName = jobj.getString("SchoolName");
-                    String StudentName = jobj.getString("StudentName");
 
-                    studentName.setText(StudentName);
-                    studentID.setText(stu_id);
-                    studentPHNO.setText(PhoneNumber);
-                    studentClg_Scl.setText(SchoolName);
-                    studentclass_degree.setText(ClassName);
-                    parentName.setText("");
-                    parentPhoneNumber.setText("");
-                } catch (JSONException e) {
-                    alertOrToastMsg.showAlert("Json Error", e.getMessage());
-                }
+                String stu_id = dataSnapshot.child("Student_ID").getValue(String.class);
+                String ClassName = dataSnapshot.child("ClassName").getValue(String.class);
+                String PhoneNumber = dataSnapshot.child("PhoneNumber").getValue(String.class);
+                String SchoolName = dataSnapshot.child("SchoolName").getValue(String.class);
+                String StudentName = dataSnapshot.child("StudentName").getValue(String.class);
+
+                studentName.setText(StudentName);
+                studentID.setText(stu_id);
+                studentPHNO.setText(PhoneNumber);
+                studentClg_Scl.setText(SchoolName);
+                studentclass_degree.setText(ClassName);
+                parentName.setText("");
+                parentPhoneNumber.setText("");
             }
 
             @Override

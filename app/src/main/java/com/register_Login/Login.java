@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.alertOrToast.AlertOrToastMsg;
+import com.common.SplastScreen;
 import com.dataHelper.CatcheData;
 import com.dataHelper.Register_LoginOperations;
 import com.dataHelper.Node;
@@ -38,6 +39,7 @@ public class Login extends AppCompatActivity {
     private FirebaseDatabase rootNode = FirebaseDatabase.getInstance("https://tutor-project-1cc32-default-rtdb.firebaseio.com/");
     private DatabaseReference reference = rootNode.getReference().child(Node.Institutes.toString());
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,7 @@ public class Login extends AppCompatActivity {
             parentTextInputLayout.setVisibility(View.INVISIBLE);
             textInputLayout.setVisibility(View.INVISIBLE);
         }
+
 
         handler = new Handler();
         handler.postAtFrontOfQueue(() -> {

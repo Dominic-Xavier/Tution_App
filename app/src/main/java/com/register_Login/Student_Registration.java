@@ -23,7 +23,6 @@ public class Student_Registration extends AppCompatActivity {
     private Button student_registration;
     private String str_student_name, str_Ins_id, str_PhoneNumber, str_ClassName, str_SchoolName, str_Password, str_confirm_Password;
     private Map<String, Object> map = new HashMap<>();
-    private AlertOrToastMsg alertOrToastMsg = new AlertOrToastMsg(this);
     private Register_LoginOperations dataManipulation = new Register_LoginOperations(this);
     private Intent intent;
 
@@ -41,6 +40,7 @@ public class Student_Registration extends AppCompatActivity {
         confirm_Password = findViewById(R.id.student_confirm_password);
         student_registration = findViewById(R.id.student_register_button);
 
+        //Must write code do the OTP Validation
         intent = new Intent(this, OTPValidation.class);
 
         Ins_id.addTextChangedListener(new TextWatcher() {
@@ -60,7 +60,6 @@ public class Student_Registration extends AppCompatActivity {
                     Ins_id.setError(null);
                 else
                     Ins_id.setError("Invalid Institude ID");
-
             }
         });
 

@@ -4,5 +4,6 @@ public enum Node {
     Parent,
     Student,
     Institutes,
-    Teacher
+    Teacher,
+    Subject
 }

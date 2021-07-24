@@ -25,7 +25,6 @@ public class StudentDetailsActivity extends AppCompatActivity {
 
     private AlertOrToastMsg alertOrToastMsg = new AlertOrToastMsg(this);
 
-    static private JSONObject jobj;
     private static DatabaseReference student_reference;
 
     @Override

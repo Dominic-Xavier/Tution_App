@@ -62,6 +62,16 @@ public class list1 extends Fragment {
         allStudents.setOnClickListener((v) -> {
             startActivity(new Intent(getActivity(), AllStudentsList.class));
         });
+
+        addSubject = getView().findViewById(R.id.add_sub);
+        addSubject.setOnClickListener((v)-> {
+            startActivity(new Intent(getActivity(), AddSubject.class));
+        });
+
+        FeeDetails = getView().findViewById(R.id.fee_details);
+        FeeDetails.setOnClickListener((v) -> {
+            startActivity(new Intent(getActivity(), AddSubject.class));
+        });
     }
 
     @Override

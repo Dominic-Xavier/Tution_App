@@ -9,16 +9,27 @@
         android:roundIcon="@drawable/pngtree_school_education_logo_png_image_4136147"
         android:supportsRtl="true"
         android:theme="@style/Theme.TutionApp">
-        <activity android:name="com.student.StudentTask"></activity>
-        <activity android:name=".Teacher_task" />
-        <activity android:name=".StudentDetailsActivity" />
-        <activity android:name="com.register_Login.Login">
+        <activity android:name=".FeesDetails"></activity>
+        <activity
+            android:name="com.common.SplastScreen"
+            android:theme="@style/SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.register_Login.Login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".AddSubject" />
+        <activity android:name="com.student.StudentTask" />
+        <activity android:name=".Teacher_task" />
+        <activity android:name=".StudentDetailsActivity" />
         <activity android:name="com.register_Login.Registration_Parents" />
         <activity android:name="com.register_Login.Student_Registration" />
         <activity android:name="com.register_Login.Teacher_Registration" />

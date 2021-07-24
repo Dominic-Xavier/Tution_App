@@ -2,4 +2,31 @@
     <string name="app_name">Tution App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="className">
+        <item>Select Class</item>
+        <item>Add Class</item>
+        <item>1 st</item>
+        <item>2 nd</item>
+        <item>3 rd</item>
+        <item>4 th</item>
+        <item>5 th</item>
+        <item>6 th</item>
+        <item>7 th</item>
+        <item>8 th</item>
+        <item>9 th</item>
+        <item>10 th</item>
+        <item>11 th</item>
+        <item>12 th</item>
+    </string-array>
+
+    <string-array name="subjectName">
+        <item>Select Subject</item>
+        <item>Add Subject</item>
+        <item>English</item>
+        <item>Tamil</item>
+        <item>Maths</item>
+        <item>Sceience</item>
+        <item>Social</item>
+    </string-array>
 </resources>

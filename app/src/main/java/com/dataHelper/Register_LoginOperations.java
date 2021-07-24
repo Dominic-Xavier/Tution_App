@@ -39,7 +39,7 @@ public class Register_LoginOperations {
         alertOrToastMsg = new AlertOrToastMsg(context);
         rootNode = FirebaseDatabase.getInstance("https://tutor-project-1cc32-default-rtdb.firebaseio.com/");
         reference = rootNode.getReference();
-        Institute_Reference = rootNode.getReference().child("Institutes");
+        Institute_Reference = rootNode.getReference().child(Node.Institutes.toString());
     }
 
     public void fetchNoOfCurrentNode(Node node, Map<String, Object> map){
@@ -64,7 +64,13 @@ public class Register_LoginOperations {
             }
 
             case Student:{
+                map.put("Student_ID","Stu_id_1");
                 createChildNode(map.get("Ins_ID").toString(), Node.Student, map);
+                break;
+            }
+
+            case Subject:{
+                createChildNode(CatcheData.getData("Ins_id", context), Node.Subject, map);
                 break;
             }
 
@@ -84,6 +90,7 @@ public class Register_LoginOperations {
             alertOrToastMsg.ToastMsg("valid Institute ID");
 
         switch (nodeName){
+
             case Student:{
                 hasChild = "Stu_id_1";
                 keyValue = "Stu_id_";
@@ -101,6 +108,12 @@ public class Register_LoginOperations {
                 keyValue = "Par_id_";
                 break;
             }
+
+            case Subject:{
+                hasChild = Node.Subject.toString();
+                keyValue = "Par_id_";
+                break;
+            }
         }
 
         Institute_Reference.child(ins_id).child(nodeName.toString()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -111,21 +124,17 @@ public class Register_LoginOperations {
                     noOfChildNodes = dataSnapshot.getChildrenCount();
                     long nodeCout = noOfChildNodes+1;
                     map.put("Student_ID", keyValue+nodeCout);
-                    Institute_Reference.child(ins_id).child(nodeName.toString()).child(map.get("Student_ID").toString()).setValue(map, new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError databaseError, @NonNull @NotNull DatabaseReference databaseReference) {
-                            if(databaseReference.getKey().equals(map.get("Student_ID")))
-                                alertOrToastMsg.ToastMsg("Values inserted successfully");
-                            else{
-                                alertOrToastMsg.ToastMsg(databaseError.toString());
-                                alertOrToastMsg.ToastMsg("Invalid Institute ID");
-                            }
+                    Institute_Reference.child(ins_id).child(nodeName.toString()).child(map.get("Student_ID").toString()).setValue(map, (@Nullable @org.jetbrains.annotations.Nullable DatabaseError databaseError, @NonNull @NotNull DatabaseReference databaseReference) -> {
+                        if(databaseReference.getKey().equals(map.get("Student_ID")))
+                            alertOrToastMsg.ToastMsg("Values inserted successfully");
+                        else{
+                            alertOrToastMsg.ToastMsg(databaseError.toString());
+                            alertOrToastMsg.ToastMsg("Invalid Institute ID");
                         }
                     });
                 }
                 else
                     DoinitialPreocess(nodeName, ins_id, map);
-
             }
 
             @Override
@@ -175,14 +184,11 @@ public class Register_LoginOperations {
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChild(Node.Institutes.toString())){
                     map.put("ins_id","Ins_id_1");
-                    reference.child("Institutes").child("Ins_id_1").setValue(map, new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError databaseError, @NonNull @NotNull DatabaseReference databaseReference) {
-                            System.out.println("Key:-"+databaseReference.getKey());
-                            if(databaseReference.getKey().equals("Ins_id_1")){
-                                alertOrToastMsg.ToastMsg("Value inserted successfully");
-                                alertOrToastMsg.showAlert("Enter this id in login","Your ID is:- "+databaseReference.getKey());
-                            }
+                    reference.child("Institutes").child("Ins_id_1").setValue(map,(@Nullable @org.jetbrains.annotations.Nullable DatabaseError databaseError, @NonNull @NotNull DatabaseReference databaseReference)-> {
+                        System.out.println("Key:-"+databaseReference.getKey());
+                        if(databaseReference.getKey().equals("Ins_id_1")){
+                            alertOrToastMsg.ToastMsg("Value inserted successfully");
+                            alertOrToastMsg.showAlert("Enter this id in login","Your ID is:- "+databaseReference.getKey());
                         }
                     });
                 }
@@ -210,6 +216,7 @@ public class Register_LoginOperations {
                             @Override
                             public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError databaseError, @NonNull @NotNull DatabaseReference databaseReference) {
                                 alertOrToastMsg.ToastMsg("Value inserted successfully...!");
+                                alertOrToastMsg.ToastMsg(databaseError.toString());
                             }
                         });
                         break;
@@ -220,20 +227,6 @@ public class Register_LoginOperations {
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
                 alertOrToastMsg.showAlert("Error", databaseError.toString());
-            }
-        });
-    }
-
-    public void fetchData(String child){
-        Institute_Reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                dataSnapshot.getValue();
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
-
             }
         });
     }

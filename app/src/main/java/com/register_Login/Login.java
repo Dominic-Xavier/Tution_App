@@ -35,7 +35,6 @@ public class Login extends AppCompatActivity {
     private AlertOrToastMsg alertOrToastMsg;
     private Register_LoginOperations dataManipulation = new Register_LoginOperations(this);
     private TextInputLayout textInputLayout, parentTextInputLayout;
-    private Handler handler;
     private FirebaseDatabase rootNode = FirebaseDatabase.getInstance("https://tutor-project-1cc32-default-rtdb.firebaseio.com/");
     private DatabaseReference reference = rootNode.getReference().child(Node.Institutes.toString());
 
@@ -61,20 +60,6 @@ public class Login extends AppCompatActivity {
             parentTextInputLayout.setVisibility(View.INVISIBLE);
             textInputLayout.setVisibility(View.INVISIBLE);
         }
-
-
-        handler = new Handler();
-        handler.postAtFrontOfQueue(() -> {
-            String data = CatcheData.getData("Ins_id", this);
-            if(data!=null && data.contains("Ins_id")){
-                startActivity(new Intent(Login.this, TutionActivity.class));
-                finish();
-            }
-            else if(data!=null && data.contains("Stu_id")){
-                startActivity(new Intent(Login.this, Student.class));
-                finish();
-            }
-        });
 
         username.addTextChangedListener(new GenericTextWatcher(username));
         student_ID.addTextChangedListener(new GenericTextWatcher(student_ID));

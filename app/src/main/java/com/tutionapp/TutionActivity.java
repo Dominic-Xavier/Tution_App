@@ -92,7 +92,7 @@ public class TutionActivity extends AppCompatActivity {
         alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Logout")
                 .setMessage("Are you sure?")
-                .setPositiveButton("Yes", (dialogInterface,i)-> {
+                .setPositiveButton("Yes", (dialogInterface,i) -> {
                     if(CatcheData.delete_data(getApplicationContext())){
                         startActivity(new Intent(getApplicationContext(), Login.class));
                         finish();

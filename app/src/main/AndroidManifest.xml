@@ -9,7 +9,8 @@
         android:roundIcon="@drawable/pngtree_school_education_logo_png_image_4136147"
         android:supportsRtl="true"
         android:theme="@style/Theme.TutionApp">
-        <activity android:name=".FeesDetails"></activity>
+        <activity android:name="com.student.StudentFeesDetails"></activity>
+        <activity android:name=".FeesDetails" />
         <activity
             android:name="com.common.SplastScreen"
             android:theme="@style/SplashScreen">

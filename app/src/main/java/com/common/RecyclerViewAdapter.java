@@ -17,9 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.Viewholders> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.Viewholder> {
 
-    private Context context;
+    Context context;
     private List<String> students, studentsPhoneNumbers;
 
     private OnStudentListner onStudentListner;
@@ -31,17 +31,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.onStudentListner = onStudentListner;
     }
 
+    //public abstract void onBindViewHolders(Viewholders holder, int position);
+    //public abstract RecyclerView.ViewHolder setViewHolder(ViewGroup parent);
+
     @NonNull
     @NotNull
     @Override
-    public Viewholders onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+    public Viewholder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_design,parent,false);
-        Viewholders viewholders = new Viewholders(view, onStudentListner);
+        Viewholder viewholders = new Viewholder(view, onStudentListner);
         return viewholders;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull RecyclerViewAdapter.Viewholders holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull RecyclerViewAdapter.Viewholder holder, int position) {
         holder.studentName.setText(students.get(position));
         holder.phoneNumber.setText(studentsPhoneNumbers.get(position));
     }
@@ -51,13 +54,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return students.size();
     }
 
-    class Viewholders extends RecyclerView.ViewHolder{
+    class Viewholder extends RecyclerView.ViewHolder{
 
         TextView studentName, phoneNumber;
         OnStudentListner onStudentListner;
         LinearLayoutCompat linearLayoutCompat;
 
-        public Viewholders(@NonNull @NotNull View itemView, OnStudentListner onStudentListner) {
+        public Viewholder(@NonNull @NotNull View itemView, OnStudentListner onStudentListner) {
             super(itemView);
             studentName = itemView.findViewById(R.id.student_names_list);
             phoneNumber = itemView.findViewById(R.id.phoneNumber);

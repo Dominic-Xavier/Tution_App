@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.alertOrToast.AlertOrToastMsg;
+import com.common.RecyclerViewAdapter;
 import com.dataHelper.CatcheData;
 import com.dataHelper.Node;
 import com.google.android.material.textfield.TextInputEditText;
@@ -127,16 +129,20 @@ public class AddSubject extends AppCompatActivity {
                     alertDialog = new AlertDialog.Builder(getApplicationContext());
                     linearLayout = new LinearLayout(getApplicationContext());
                     linearLayout.setOrientation(LinearLayout.VERTICAL);
-                    linearLayout.addView(subject);
                     textInputLayout = new TextInputLayout(AddSubject.this);
                     textInputLayout.setBoxBackgroundColor(Color.WHITE);
                     textInputLayout.addView(subject);
-                    alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(AddSubject.this,R.style.Widget_MaterialComponents_Button_OutlinedButton))
+                    linearLayout.addView(textInputLayout);
+                    alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(AddSubject.this,R.style.Widget_AppCompat_ActionBar))
                             .setTitle("Add Subject Name")
                             .setPositiveButton("Ok",(dialogInterface, which) -> {
                                 String subName = subject.getText().toString();
                                 if(!subName.equals(""))
                                     allsubjectNameList.add(subName);
+                                linearLayout.removeAllViews();
+                            })
+                            .setNegativeButton("Calcel", (dialogInterface, which)-> {
+                                linearLayout.removeAllViews();
                             });
                     dialog = alertDialog.create();
                     dialog.setView(linearLayout);
@@ -180,7 +186,6 @@ public class AddSubject extends AppCompatActivity {
                                                     linearLayout.removeAllViews();
                                                     alertOrToastMsg.ToastMsg("Values Inserted Successfully...!");
                                                 }
-
                                                 else{
                                                     dialogInterface.dismiss();
                                                     linearLayout.removeAllViews();
@@ -194,7 +199,6 @@ public class AddSubject extends AppCompatActivity {
                                     linearLayout.removeAllViews();
                                     DoInitialProcess(strSubjectName, strClassName, fees);
                                 }
-
                             }
 
                             @Override
@@ -228,7 +232,6 @@ public class AddSubject extends AppCompatActivity {
                             alertOrToastMsg.ToastMsg("Values Inserted Successfully...!"+databaseReference.toString());
                         if(databaseError!=null)
                             alertOrToastMsg.showAlert("Error", databaseError.toString());
-
                     });
                 }
                 map.clear();
@@ -242,10 +245,10 @@ public class AddSubject extends AppCompatActivity {
     }
 
 
-    private TextInputEditText addSubjects(){
+    public TextInputEditText addSubjects(){
         TextInputEditText textInputEditText = new TextInputEditText(new ContextThemeWrapper(AddSubject.this,
                 R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox_Dense));
-        textInputEditText.setHint("Subject Name");
+        textInputEditText.setHint("Add Subject");
         textInputEditText.setTextSize(20);
         return textInputEditText;
     }
@@ -258,7 +261,7 @@ public class AddSubject extends AppCompatActivity {
         return textInputEditText;
     }
 
-    private TextInputEditText addFeeDetails(){
+    public TextInputEditText addFeeDetails(){
         TextInputEditText textInputEditText = new TextInputEditText(new ContextThemeWrapper(AddSubject.this,
                 R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox_Dense));
         textInputEditText.setHint("Enter Fees");

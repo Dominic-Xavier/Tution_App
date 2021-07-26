@@ -1,7 +1,10 @@
 package com.owner;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import com.alertOrToast.AlertOrToastMsg;
 import com.common.RecyclerViewAdapter;
@@ -30,8 +33,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class AllStudentsList extends AppCompatActivity implements RecyclerViewAdapter.OnStudentListner {
 
-    private RecyclerView recyclerView;
-    private RecyclerViewAdapter recyclerViewAdapter;
+    private static RecyclerView recyclerView;
+    private static RecyclerViewAdapter recyclerViewAdapter;
     private static AlertOrToastMsg alertOrToastMsg;
     private static Map<String, List<String>> map = new HashMap<>();
     List<String> all_student_IDs;
@@ -54,41 +57,45 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
         recyclerView = findViewById(R.id.recyclerView);
 
         if(names!=null && phoneNumbers!=null){
-            recyclerViewAdapter = new RecyclerViewAdapter(this, names, phoneNumbers, this::onClick);
-            recyclerView.setAdapter(recyclerViewAdapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView(this, names, phoneNumbers, this::onClick, recyclerView);
         }
     }
 
-    private static Map<String, List<String>> getNamesAndPhoneNumbers(String ins_id){
+    public static void recyclerView(Context context, List<String> names, List<String> phoneNumbers, RecyclerViewAdapter.OnStudentListner onStudentListner, RecyclerView recyclerView){
+        recyclerViewAdapter = new RecyclerViewAdapter(context, names, phoneNumbers, onStudentListner);
+        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+    }
+
+    public static Map<String, List<String>> getNamesAndPhoneNumbers(String ins_id){
 
         reference.child(ins_id).child(Node.Student.toString()).child("")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                        List<String> studentNames = new ArrayList<>();
-                        List<String> studentPhoneNumbers = new ArrayList<>();
-                        List<String> studentIDs = new ArrayList<>();
-                        System.out.println("Student Lists:-"+dataSnapshot.getValue());
-                        for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                            String Names = snapshot.child("StudentName").getValue(String.class);
-                            String phone_Number = snapshot.child("PhoneNumber").getValue(String.class);
-                            String student_ID = snapshot.child("Student_ID").getValue(String.class);
-                            studentNames.add(Names);
-                            studentPhoneNumbers.add(phone_Number);
-                            studentIDs.add(student_ID);
-                        }
-                        map.put("StudentNames", studentNames);
-                        map.put("StudentPhoneNumbers", studentPhoneNumbers);
-                        map.put("Student_IDs", studentIDs);
-                        System.out.println("Map is:-"+map);
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                    List<String> studentNames = new ArrayList<>();
+                    List<String> studentPhoneNumbers = new ArrayList<>();
+                    List<String> studentIDs = new ArrayList<>();
+                    System.out.println("Student Lists:-"+dataSnapshot.getValue());
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        String Names = snapshot.child("StudentName").getValue(String.class);
+                        String phone_Number = snapshot.child("PhoneNumber").getValue(String.class);
+                        String student_ID = snapshot.child("Student_ID").getValue(String.class);
+                        studentNames.add(Names);
+                        studentPhoneNumbers.add(phone_Number);
+                        studentIDs.add(student_ID);
                     }
+                    map.put("StudentNames", studentNames);
+                    map.put("StudentPhoneNumbers", studentPhoneNumbers);
+                    map.put("Student_IDs", studentIDs);
+                    System.out.println("Map is:-"+map);
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
-                        alertOrToastMsg.ToastMsg(databaseError.toString());
-                    }
-                });
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
+                    alertOrToastMsg.ToastMsg(databaseError.toString());
+                }
+            });
         System.out.println("Map are:-"+map);
         return map;
     }

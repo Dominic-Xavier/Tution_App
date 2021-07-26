@@ -22,12 +22,13 @@ public class SplastScreen extends AppCompatActivity {
 
         handler = new Handler();
         handler.postAtFrontOfQueue(() -> {
-            String data = CatcheData.getData("Ins_id", this);
-            if(data!=null && data.contains("Ins_id")){
+            String ins_id = CatcheData.getData("Ins_id", this);
+            String stu_id = CatcheData.getData("Stu_id", this);
+            if(ins_id!=null && ins_id.contains("Ins_id")){
                 startActivity(new Intent(SplastScreen.this, TutionActivity.class));
                 finish();
             }
-            else if(data!=null && data.contains("Stu_id")){
+            else if(stu_id!=null && stu_id.contains("Stu_id")){
                 startActivity(new Intent(SplastScreen.this, Student.class));
                 finish();
             }

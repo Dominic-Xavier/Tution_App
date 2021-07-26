@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class list1 extends Fragment {
 
-    private AppCompatButton allStudents, addSubject, FeeDetails, addTeacher, studentPregress, attendence;
+    private AppCompatButton allStudents, addSubject, feeDetails, addTeacher, studentPregress, attendence;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,9 +68,9 @@ public class list1 extends Fragment {
             startActivity(new Intent(getActivity(), AddSubject.class));
         });
 
-        FeeDetails = getView().findViewById(R.id.fee_details);
-        FeeDetails.setOnClickListener((v) -> {
-            startActivity(new Intent(getActivity(), AddSubject.class));
+        feeDetails = getView().findViewById(R.id.fee_details);
+        feeDetails.setOnClickListener((v) -> {
+            startActivity(new Intent(getActivity(), FeesDetails.class));
         });
     }
 

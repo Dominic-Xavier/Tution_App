@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class StudentList1 extends Fragment {
 
-
     private AppCompatButton taskAssignedButton;
 
     public StudentList1() {
@@ -32,6 +31,8 @@ public class StudentList1 extends Fragment {
 
         });
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

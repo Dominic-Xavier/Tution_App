@@ -11,32 +11,60 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/ViewTask"
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/box_button"
-            android:drawableTop="@drawable/assign_task"
-            android:minWidth="100dp"
-            android:minHeight="100dp"
-            android:text="View Task"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/add_sub"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/ViewTask"
+                android:layout_width="match_parent"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/box_button"
+                android:drawableTop="@drawable/assign_task"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:text="View Task"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/add_sub"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/box_button"
+                android:drawableTop="@drawable/attendence"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:text="Attendence" />
+
+        </TableRow>
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/box_button"
-            android:drawableTop="@drawable/attendence"
-            android:minWidth="100dp"
-            android:minHeight="100dp"
-            android:text="Attendence" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
-    </TableRow>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/selectSub"
+                android:layout_width="match_parent"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/box_button"
+                android:drawableTop="@drawable/select_subject"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:text="Select Sebject"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/studentsreport"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/box_button"
+                android:drawableTop="@drawable/student_progression_1"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:text="StudentReport" />
+
+        </TableRow>
 
     </TableLayout>
 

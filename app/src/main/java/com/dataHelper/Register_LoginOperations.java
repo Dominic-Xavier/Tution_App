@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import com.alertOrToast.AlertOrToastMsg;
+import com.common.AlertOrToastMsg;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -14,8 +14,6 @@ import com.student.Student;
 import com.tutionapp.TutionActivity;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Map;
 

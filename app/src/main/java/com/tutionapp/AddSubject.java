@@ -6,7 +6,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,8 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.alertOrToast.AlertOrToastMsg;
-import com.common.RecyclerViewAdapter;
+import com.common.AlertOrToastMsg;
 import com.dataHelper.CatcheData;
 import com.dataHelper.Node;
 import com.google.android.material.textfield.TextInputEditText;

@@ -2,7 +2,6 @@ package com.register_Login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -10,18 +9,14 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.alertOrToast.AlertOrToastMsg;
-import com.common.SplastScreen;
-import com.dataHelper.CatcheData;
+import com.common.AlertOrToastMsg;
 import com.dataHelper.Register_LoginOperations;
 import com.dataHelper.Node;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.student.Student;
 import com.tutionapp.R;
-import com.tutionapp.TutionActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 

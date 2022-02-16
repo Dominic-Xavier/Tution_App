@@ -1,4 +1,4 @@
-package com.alertOrToast;
+package com.common;
 
 import android.app.AlertDialog;
 import android.content.Context;

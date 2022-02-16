@@ -3,10 +3,8 @@ package com.owner;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
 
-import com.alertOrToast.AlertOrToastMsg;
+import com.common.AlertOrToastMsg;
 import com.common.RecyclerViewAdapter;
 import com.dataHelper.CatcheData;
 import com.dataHelper.Node;

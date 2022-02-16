@@ -3,8 +3,6 @@ package com.student;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -15,11 +13,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alertOrToast.AlertOrToastMsg;
+import com.common.AlertOrToastMsg;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.tutionapp.AddSubject;
 import com.tutionapp.R;
 
 public class StudentFeesDetails extends AppCompatActivity {

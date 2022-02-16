@@ -4,12 +4,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import com.alertOrToast.AlertOrToastMsg;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.common.AlertOrToastMsg;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;

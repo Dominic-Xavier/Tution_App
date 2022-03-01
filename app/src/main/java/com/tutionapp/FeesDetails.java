@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.common.RecyclerViewAdapter;
+import com.recyclerViewAdapters.RecyclerViewAdapter;
 import com.dataHelper.CatcheData;
-import com.owner.AllStudentsList;
+import com.student.AllStudentsList;
 import com.student.StudentFeesDetails;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class FeesDetails extends AppCompatActivity implements RecyclerViewAdapte
         setContentView(R.layout.student_fee_details);
         recyclerView = findViewById(R.id.student_details);
 
-        Map<String, List<String>> map = AllStudentsList.getNamesAndPhoneNumbers(CatcheData.getData("Ins_id", this));
+        Map<String, List<String>> map = new AllStudentsList().getNamesAndPhoneNumbers(CatcheData.getData("Ins_id", this));
         System.out.println("Value of map is:"+map);
         stu_names = map.get("StudentNames");
         Stu_id = map.get("Student_IDs");

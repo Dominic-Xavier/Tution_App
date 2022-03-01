@@ -11,11 +11,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import com.dataHelper.CatcheData;
-import com.owner.AllStudentsList;
-import com.register_Login.Login;
+import com.student.AllStudentsList;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public class list2 extends Fragment {
 
     private AppCompatButton assignTask;
+    Intent intent;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,8 +61,10 @@ public class list2 extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         assignTask = getView().findViewById(R.id.assignTask);
+        intent = new Intent(getActivity(), AllStudentsList.class);
+        intent.putExtra("keyword", "assignTask");
         assignTask.setOnClickListener((v)-> {
-            startActivity(new Intent(getActivity(), AllStudentsList.class));
+            startActivity(intent);
         });
     }
 

@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.owner.AllStudentsList;
+import com.student.AllStudentsList;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +29,7 @@ public class list1 extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private Intent intent;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -60,7 +61,9 @@ public class list1 extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         allStudents = getView().findViewById(R.id.all_students);
         allStudents.setOnClickListener((v) -> {
-            startActivity(new Intent(getActivity(), AllStudentsList.class));
+            intent = new Intent(getActivity(), AllStudentsList.class);
+            intent.putExtra("keyword","allStudents");
+            startActivity(intent);
         });
 
         addSubject = getView().findViewById(R.id.add_sub);

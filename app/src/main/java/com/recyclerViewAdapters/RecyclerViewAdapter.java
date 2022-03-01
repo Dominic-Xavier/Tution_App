@@ -1,10 +1,9 @@
-package com.common;
+package com.recyclerViewAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tutionapp.R;
@@ -54,7 +53,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return students.size();
     }
 
-    class Viewholder extends RecyclerView.ViewHolder{
+    public static class Viewholder extends RecyclerView.ViewHolder{
 
         TextView studentName, phoneNumber;
         OnStudentListner onStudentListner;

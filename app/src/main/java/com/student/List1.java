@@ -1,5 +1,6 @@
 package com.student;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,11 +17,11 @@ import com.tutionapp.R;
 import org.jetbrains.annotations.NotNull;
 
 
-public class StudentList1 extends Fragment {
+public class List1 extends Fragment {
 
     private AppCompatButton taskAssignedButton;
 
-    public StudentList1() {
+    public List1() {
         // Required empty public constructor
     }
 
@@ -28,7 +29,7 @@ public class StudentList1 extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         taskAssignedButton = getView().findViewById(R.id.ViewTask);
         taskAssignedButton.setOnClickListener((v) -> {
-
+            startActivity(new Intent(getActivity(), StudentTask.class));
         });
     }
 

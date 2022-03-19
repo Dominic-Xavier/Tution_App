@@ -104,7 +104,7 @@ public class Login extends AppCompatActivity {
                         break;
                     }
                     case "Parents":{
-                        alertOrToastMsg.ToastMsg("It is under development");
+                        alertOrToastMsg.showAlert("Development Stage","It is under development");
                         break;
                     }
 
@@ -114,7 +114,7 @@ public class Login extends AppCompatActivity {
                 }
             }
             else {
-                alertOrToastMsg.showAlert("Error","Username or password is empty or radio button is not selected");
+                alertOrToastMsg.showAlert("Error","Username or password is empty....!");
             }
         });
     }

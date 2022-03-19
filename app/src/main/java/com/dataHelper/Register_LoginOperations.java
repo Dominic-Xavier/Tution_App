@@ -330,9 +330,9 @@ public class Register_LoginOperations {
                     String StudentID = dataSnapshot.child("Student_ID").getValue(String.class);
                     String Ins_ID = dataSnapshot.child("Ins_ID").getValue(String.class);
                     String passWord = dataSnapshot.child("Password").getValue(String.class);
-                    System.out.println("");
                     if(Student_ID.equals(StudentID) && ins_id.equals(Ins_ID) && pass.equals(passWord)){
                         CatcheData.setData("Stu_id",StudentID, context);
+                        CatcheData.setData("Ins_id", Ins_ID, context);
                         context.startActivity(new Intent(context, Student.class));
                         ((Activity)context).finish();
                     }

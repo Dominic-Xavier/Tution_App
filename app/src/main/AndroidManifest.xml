@@ -37,7 +37,7 @@
         <activity android:name="com.register_Login.WhoAreYou" />
         <activity android:name=".TutionActivity" />
         <activity android:name="com.student.Student" />
-        <activity android:name="com.student.AllStudentsList" />
+        <activity android:name=".AllStudentsList" />
         <activity
             android:name="com.register_Login.OTPValidation"
             android:screenOrientation="portrait"

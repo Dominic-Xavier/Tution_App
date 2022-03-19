@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".Teacher_task">
 
+    <ProgressBar
+        android:id="@+id/prgress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/list_of_student_task"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_of_student_task"
         android:layout_width="match_parent"

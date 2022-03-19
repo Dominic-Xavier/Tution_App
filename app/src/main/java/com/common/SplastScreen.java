@@ -24,7 +24,7 @@ public class SplastScreen extends AppCompatActivity {
         handler.postAtFrontOfQueue(() -> {
             String ins_id = CatcheData.getData("Ins_id", this);
             String stu_id = CatcheData.getData("Stu_id", this);
-            if(ins_id!=null && ins_id.contains("Ins_id")){
+            if(ins_id!=null && ins_id.contains("Ins_id") && stu_id==null){
                 startActivity(new Intent(SplastScreen.this, TutionActivity.class));
                 finish();
             }

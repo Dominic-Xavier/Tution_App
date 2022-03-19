@@ -8,7 +8,6 @@ import android.os.Bundle;
 
 import com.recyclerViewAdapters.RecyclerViewAdapter;
 import com.dataHelper.CatcheData;
-import com.student.AllStudentsList;
 import com.student.StudentFeesDetails;
 
 import java.util.List;

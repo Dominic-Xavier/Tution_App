@@ -8,10 +8,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/layout/activity_student_task.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/activity_teacher_task.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/all_students_list.xml" value="0.28532608695652173" />
         <entry key="app/src/main/res/layout/fragment_student_list1.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/otp_validation.xml" value="0.2171875" />
+        <entry key="app/src/main/res/layout/student_activity.xml" value="0.18177083333333333" />
         <entry key="app/src/main/res/layout/teacher_list2.xml" value="0.28532608695652173" />
         <entry key="app/src/main/res/layout/teacher_task_design.xml" value="0.28532608695652173" />
       </map>

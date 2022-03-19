@@ -39,7 +39,7 @@ public class Student extends AppCompatActivity {
         setContentView(R.layout.student_activity);
 
         fragmentList = new ArrayList<>();
-        fragmentList.add(new StudentList1());
+        fragmentList.add(new List1());
         dotsLayout = findViewById(R.id.student_dots);
         viewPager = findViewById(R.id.student_view_pager);
 

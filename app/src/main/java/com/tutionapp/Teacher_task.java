@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,35 +17,44 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.common.AlertOrToastMsg;
 import com.dataHelper.TaskDetails;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.recyclerViewAdapters.TeacherRecyclerAdapter;
+import com.recyclerViewAdapters.TopicListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Teacher_task extends AppCompatActivity implements TeacherRecyclerAdapter.OnTask{
+public class Teacher_task extends AppCompatActivity {
 
-    private FloatingActionButton actionButton, add,delete;
+    private static FloatingActionButton actionButton, add,delete;
     private AlertDialog.Builder builder;
     private AlertDialog dialog;
     private LinearLayout linearLayout;
     private String txtdates, txttitle, txtDescription, stu_ID, txtSubject;
-    private List<String> allDates, allTitles, allDescriptions, allSubjects;
-    private TeacherRecyclerAdapter recyclerAdapter;
-    private RecyclerView recyclerView;
-    private AlertOrToastMsg alertOrToastMsg;
+    private static TeacherRecyclerAdapter recyclerAdapter;
+    private static RecyclerView recyclerView;
+    private static AlertOrToastMsg alertOrToastMsg;
     private Animation fabOpen, fabClose, rotateFordward, rotateBackword;
     private boolean isOpen = false;
     private static final Map<String, Object> task = new HashMap<>();
     private TaskDetails taskDetails;
     private Handler handler;
+    private ProgressBar progressBar;
+
+    public static FloatingActionButton getActionButton() {
+        return actionButton;
+    }
+
+    public void setActionButton(FloatingActionButton actionButton) {
+        this.actionButton = actionButton;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -52,20 +62,21 @@ public class Teacher_task extends AppCompatActivity implements TeacherRecyclerAd
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_task);
 
-        handler = new Handler();
-        handler.postAtFrontOfQueue(() -> {
-            stu_ID = getIntent().getStringExtra("studentID");
-
-        });
-
+        alertOrToastMsg = new AlertOrToastMsg(this);
+        progressBar = findViewById(R.id.prgress_bar);
         actionButton = findViewById(R.id.floating_button);
         add = findViewById(R.id.addTask);
         delete = findViewById(R.id.deleteTask);
+
         recyclerView = findViewById(R.id.list_of_student_task);
-        allDates = new ArrayList<>();
-        allTitles = new ArrayList<>();
-        allDescriptions = new ArrayList<>();
-        allSubjects = new ArrayList<>();
+
+        handler = new Handler();
+        handler.postAtFrontOfQueue(() -> {
+            stu_ID = getIntent().getStringExtra("studentID");
+            taskDetails = new TaskDetails(Teacher_task.this, progressBar);
+            progressBar.setVisibility(View.VISIBLE);
+            taskDetails.getTaskDetails(stu_ID, recyclerView);
+        });
 
         fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open);
         fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close);
@@ -74,7 +85,7 @@ public class Teacher_task extends AppCompatActivity implements TeacherRecyclerAd
         rotateBackword = AnimationUtils.loadAnimation(this, R.anim.rotate_backward);
 
         stu_ID = getIntent().getStringExtra("studentID");
-        alertOrToastMsg = new AlertOrToastMsg(this);
+
         alertOrToastMsg.ToastMsg("Student ID is: "+stu_ID);
 
         actionButton.setOnClickListener((v) -> {
@@ -95,58 +106,66 @@ public class Teacher_task extends AppCompatActivity implements TeacherRecyclerAd
                 linearLayout.addView(txtTextArea);
 
                 builder = new AlertDialog.Builder(Teacher_task.this)
-                        .setView(linearLayout)
-                        .setTitle("Add Task")
-                        .setPositiveButton("Ok", (DialogInterface dialogInterface, int i) -> {
+                    .setView(linearLayout)
+                    .setTitle("Add Task")
+                    .setPositiveButton("Ok", (DialogInterface dialogInterface, int i) -> {
 
-                            txtdates = txtDate.getText().toString();
-                            txttitle = txtTitle.getText().toString();
-                            txtDescription = txtTextArea.getText().toString();
-                            txtSubject = subject.getText().toString();
+                        txtdates = txtDate.getText().toString();
+                        txttitle = txtTitle.getText().toString();
+                        txtDescription = txtTextArea.getText().toString();
+                        txtSubject = subject.getText().toString();
 
-                            task.put("Date", txtdates);
-                            task.put("Title", txttitle);
-                            task.put("Description", txtDescription);
-                            task.put("Subject", txtSubject);
-                            taskDetails = new TaskDetails(Teacher_task.this, task);
+                        task.put("Date", txtdates);
+                        task.put("Topic", txttitle);
+                        task.put("Description", txtDescription);
+                        task.put("Subject", txtSubject);
+                        task.put("Status", "InProgress");
+                        taskDetails = new TaskDetails(Teacher_task.this, task);
 
-                            if(!taskDetails.validformat(txtdates)){
-                                Toast.makeText(this, "Invalid Date format", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
+                        if(!taskDetails.validformat(txtdates)){
+                            Toast.makeText(this, "Invalid Date format", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                            if(txttitle.isEmpty() || txtDescription.isEmpty() || txtSubject.isEmpty()){
-                                Toast.makeText(this, "Empty fields not allowed", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
+                        if(txttitle.isEmpty() || txtDescription.isEmpty() || txtSubject.isEmpty()){
+                            Toast.makeText(this, "Empty fields not allowed", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                            taskDetails.addTask(stu_ID);
+                        taskDetails.addTask(stu_ID, recyclerView);
 
-                            allDates.add(txtdates);
-                            allTitles.add(txttitle);
-                            allDescriptions.add(txtDescription);
-                            allSubjects.add(txtSubject);
-
-                            recyclerAdapter = new TeacherRecyclerAdapter(allDates, allTitles, allSubjects, Teacher_task.this::onClick);
-                            recyclerView.setAdapter(recyclerAdapter);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(Teacher_task.this));
-
-                            linearLayout.removeAllViews();
-                            linearLayout = null;
-                        })
-                        .setNegativeButton("Cancel", (DialogInterface dialogInterface, int i) -> {
-                            linearLayout.removeAllViews();
-                            linearLayout = null;
-                        });
-                dialog = builder.create();
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.show();
+                        linearLayout.removeAllViews();
+                        linearLayout = null;
+                    })
+                    .setNegativeButton("Cancel", (DialogInterface dialogInterface, int i) -> {
+                        linearLayout.removeAllViews();
+                        linearLayout = null;
+                    });
+            dialog = builder.create();
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
         });
 
         delete.setOnClickListener((v) -> {
             animateFab();
-            Toast.makeText(this, "Delete Task Clicked", Toast.LENGTH_SHORT).show();
+            setActionButton(delete);
+            List<String> list = TaskDetails.getListOfSelectedIds();
+            if(list!=null){
+                if(!list.isEmpty())
+                    taskDetails.deleteTasks(list, stu_ID, recyclerView);
+                else
+                    alertOrToastMsg.ToastMsg("Please select a task...!");
+            }
+            else
+                alertOrToastMsg.ToastMsg("Please select a task...!");
         });
+    }
+
+    public static void recyclerView(Context context, List<String> dates, List<String> allTitles, List<String> allSubjects, List<String> topicIDs,
+                                    RecyclerView recyclerView, TeacherRecyclerAdapter.OnTask task, TopicListener topicListener){
+        recyclerAdapter = new TeacherRecyclerAdapter(dates, allTitles, allSubjects,topicIDs, task, topicListener);
+        recyclerView.setAdapter(recyclerAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
     }
 
     private EditText date(){
@@ -182,11 +201,6 @@ public class Teacher_task extends AppCompatActivity implements TeacherRecyclerAd
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-    }
-
-    @Override
-    public void onClick(int position) {
-
     }
 
     private void animateFab(){

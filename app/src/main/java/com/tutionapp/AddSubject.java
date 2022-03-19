@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 
 import com.common.AlertOrToastMsg;
 import com.dataHelper.CatcheData;
+import com.dataHelper.DatabaseLinks;
 import com.dataHelper.Node;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -48,8 +49,7 @@ public class AddSubject extends AppCompatActivity {
     private LinearLayout linearLayout;
     private List<String> allclassNameList, allsubjectNameList;
     private TextInputLayout textInputLayout;
-    private DatabaseReference instutiteRef = FirebaseDatabase.getInstance("https://tutor-project-1cc32-default-rtdb.firebaseio.com/").getReference()
-            .child(Node.Institutes.toString());
+    private DatabaseReference instutiteRef = DatabaseLinks.baseReference;
     private Map<String, String> map = new HashMap<>();
     private static String Institute_ID;
     private TextInputEditText classes, subject;

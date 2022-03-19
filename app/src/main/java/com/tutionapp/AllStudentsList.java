@@ -1,9 +1,10 @@
-package com.student;
+package com.tutionapp;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.common.AlertOrToastMsg;
 import com.recyclerViewAdapters.RecyclerViewAdapter;
@@ -14,9 +15,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.tutionapp.R;
-import com.tutionapp.StudentDetailsActivity;
-import com.tutionapp.Teacher_task;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +37,8 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
     private static Map<String, List<String>> map = new HashMap<>();
     private static Map<String, List<String>> map1;
     private Intent intent;
-    List<String> all_student_IDs;
+    private ProgressBar progressBar;
+    List<String> studentIDs;
     private static final DatabaseReference reference = FirebaseDatabase.getInstance("https://tutor-project-1cc32-default-rtdb.firebaseio.com/")
             .getReference().child(Node.Institutes.toString());
 
@@ -50,8 +49,10 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
 
         String ins_id = CatcheData.getData("Ins_id", this);
         alertOrToastMsg = new AlertOrToastMsg(this);
+        recyclerView = findViewById(R.id.recyclerView);
+        progressBar = findViewById(R.id.student_progress_bar);
 
-        Map<String, List<String>> maps = getNamesAndPhoneNumbers(ins_id);
+        /*Map<String, List<String>> maps = getNamesAndPhoneNumbers(ins_id);
         Map<String, List<String>> maps1 = getMap();
         System.out.println("Get Map is "+maps1);
         if(maps.isEmpty())
@@ -60,14 +61,17 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
         List<String> phoneNumbers = maps.get("StudentPhoneNumbers");
         all_student_IDs = maps.get("Student_IDs");
 
-        recyclerView = findViewById(R.id.recyclerView);
+
 
         if(names!=null && phoneNumbers!=null){
             recyclerView(this, names, phoneNumbers, this::onClick, recyclerView);
-        }
+        }*/
+        progressBar.setVisibility(View.VISIBLE);
+        getNamesAndPhoneNumbers(ins_id);
+
     }
 
-    public static void recyclerView(Context context, List<String> names, List<String> phoneNumbers, RecyclerViewAdapter.OnStudentListner onStudentListner, RecyclerView recyclerView){
+    public static void recyclerView(Context context, List<String> names, List<String> phoneNumbers, RecyclerViewAdapter.OnStudentListner onStudentListner, RecyclerView recyclerView) {
         recyclerViewAdapter = new RecyclerViewAdapter(context, names, phoneNumbers, onStudentListner);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -77,11 +81,12 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
 
         reference.child(ins_id).child(Node.Student.toString()).child("")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
+
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                     List<String> studentNames = new ArrayList<>();
                     List<String> studentPhoneNumbers = new ArrayList<>();
-                    List<String> studentIDs = new ArrayList<>();
+                    studentIDs = new ArrayList<>();
                     System.out.println("Student Lists:-"+dataSnapshot.getValue());
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                         String Names = snapshot.child("StudentName").getValue(String.class);
@@ -91,12 +96,14 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
                         studentPhoneNumbers.add(phone_Number);
                         studentIDs.add(student_ID);
                     }
+                    recyclerView(AllStudentsList.this, studentNames, studentPhoneNumbers, AllStudentsList.this::onClick, recyclerView);
                     map.put("StudentNames", studentNames);
                     map.put("StudentPhoneNumbers", studentPhoneNumbers);
                     map.put("Student_IDs", studentIDs);
                     System.out.println("Map is:- "+map);
                     setMap(map);
                     map1 = map;
+                    progressBar.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -119,7 +126,7 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
 
     @Override
     public void onClick(int position) {
-        String ids = all_student_IDs.get(position);
+        String ids = studentIDs.get(position);
         //alertOrToastMsg.ToastMsg(ids);
         String task = getIntent().getStringExtra("keyword");
         if(task.equals("assignTask")){

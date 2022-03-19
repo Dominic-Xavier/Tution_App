@@ -12,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.student.AllStudentsList;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

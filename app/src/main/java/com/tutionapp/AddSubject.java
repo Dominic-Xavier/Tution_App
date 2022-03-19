@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatSpinner;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.view.ContextThemeWrapper;
 import android.view.View;
@@ -34,8 +35,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class AddSubject extends AppCompatActivity {
 
@@ -50,10 +53,13 @@ public class AddSubject extends AppCompatActivity {
     private List<String> allclassNameList, allsubjectNameList;
     private TextInputLayout textInputLayout;
     private DatabaseReference instutiteRef = DatabaseLinks.baseReference;
-    private Map<String, String> map = new HashMap<>();
+    private Map<String, Object> map = new HashMap<>();
     private static String Institute_ID;
     private TextInputEditText classes, subject;
     private TextInputEditText text;
+    private Handler handler;
+    private static final Map<String, List<String>> classSub = new HashMap<>();
+    private Map<String, List<String>> SubDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,17 +77,36 @@ public class AddSubject extends AppCompatActivity {
         allclassNameList = new ArrayList<>(Arrays.asList(listOfClassNames));
         allsubjectNameList = new ArrayList<>(Arrays.asList(listOfSubjects));
 
+
+        handler = new Handler();
+        handler.postAtFrontOfQueue(() -> {
+            SubDetails = getSubjectDetails();
+        });
+
         ArrayAdapter<String> classSelection = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item, allclassNameList);
 
         ArrayAdapter<String> subjectSelection = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item, allsubjectNameList);
 
         selectClass.setAdapter(classSelection);
         selectSubject.setAdapter(subjectSelection);
-
+        Set<String> set = new HashSet<>();
         selectClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 strClassName = adapterView.getItemAtPosition(i).toString();
+                List<String> list1 = SubDetails.get(strClassName);
+                if(SubDetails!=null && list1!=null) {
+                    allsubjectNameList.removeAll(allsubjectNameList);
+                    allsubjectNameList.add("Select Subject");
+                    allsubjectNameList.add("Add Subject");
+                    allsubjectNameList.addAll(SubDetails.get(strClassName));
+                }
+                else{
+                    allsubjectNameList.removeAll(allsubjectNameList);
+                    allsubjectNameList.add("Select Subject");
+                    allsubjectNameList.add("Add Subject");
+                }
+
                 if(strClassName.equals("Add Class")){
                     classes = addClasses();
                     linearLayout = new LinearLayout(AddSubject.this);
@@ -97,12 +122,9 @@ public class AddSubject extends AppCompatActivity {
                                 if(!className.isEmpty())
                                     allclassNameList.add(className);
                             })
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    linearLayout.removeAllViews();
-                                    textInputLayout.removeAllViews();
-                                }
+                            .setNegativeButton("Cancel", (DialogInterface dialogInterface, int j) -> {
+                                linearLayout.removeAllViews();
+                                textInputLayout.removeAllViews();
                             });
                     dialog = alertDialog.create();
                     dialog.setView(linearLayout);
@@ -122,6 +144,7 @@ public class AddSubject extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 strSubjectName = adapterView.getItemAtPosition(i).toString();
+
                 if(strSubjectName.equals("Add Subject")){
                     subject = addSubjects();
                     alertDialog = new AlertDialog.Builder(getApplicationContext());
@@ -159,7 +182,7 @@ public class AddSubject extends AppCompatActivity {
         Submit.setOnClickListener((view) -> {
 
             if(strClassName.equals("Select Class") || strSubjectName.equals("Select Subject") || strClassName.equals("Add Class") || strSubjectName.equals("Add Subject")){
-                alertOrToastMsg.ToastMsg("Select Class or Subject");
+                alertOrToastMsg.ToastMsg("Select Class and Subject");
                 return;
             }
 
@@ -176,7 +199,7 @@ public class AddSubject extends AppCompatActivity {
                             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                                 if(dataSnapshot.hasChild(Node.Subject.toString())){
                                     map.put(strSubjectName, fees);
-                                    instutiteRef.child(Institute_ID).child(Node.Subject.toString()).child(strClassName).setValue(map,
+                                    instutiteRef.child(Institute_ID).child(Node.Subject.toString()).child(strClassName).updateChildren(map,
                                             (@Nullable @org.jetbrains.annotations.Nullable DatabaseError databaseError, @NonNull @NotNull DatabaseReference databaseReference) -> {
                                                 if(databaseReference.child(strSubjectName).getKey().equals(strSubjectName)
                                                         && databaseReference.getKey().equals(strClassName)){
@@ -216,6 +239,34 @@ public class AddSubject extends AppCompatActivity {
 
             alertOrToastMsg.ToastMsg("Class Name:"+strClassName+" Subject Name:"+strSubjectName);
         });
+    }
+
+    private Map<String, List<String>> getSubjectDetails(){
+        instutiteRef.child(Institute_ID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(Node.Subject.toString())){
+                    for (DataSnapshot classNames : dataSnapshot.child(Node.Subject.toString()).getChildren()) {
+                        String className = classNames.getKey();
+                        allclassNameList.add(className);
+                        List<String> subNames = new ArrayList<>();
+                        for (DataSnapshot sub : dataSnapshot.child(Node.Subject.toString()).child(className).getChildren()) {
+                            String subName = sub.getKey();
+                            subNames.add(subName);
+                            classSub.put(className, subNames);
+                        }
+
+                    }
+                    System.out.println("Subject Details are "+classSub);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                alertOrToastMsg.showAlert("Error", databaseError.toString());
+            }
+        });
+        return classSub;
     }
 
     private void DoInitialProcess(String subjectName, String className, String fees) {

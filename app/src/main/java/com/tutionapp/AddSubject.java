@@ -15,13 +15,16 @@ import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.common.AlertOrToastMsg;
 import com.dataHelper.CatcheData;
 import com.dataHelper.DatabaseLinks;
 import com.dataHelper.Node;
+import com.dd.CircularProgressButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
@@ -42,15 +45,14 @@ import java.util.Set;
 
 public class AddSubject extends AppCompatActivity {
 
-    private AppCompatSpinner selectClass, selectSubject;
-    private Button Submit;
+    private AutoCompleteTextView selectClass, selectSubject;
     private String strClassName, strSubjectName;
     private AlertOrToastMsg alertOrToastMsg = new AlertOrToastMsg(this);
     private String [] listOfClassNames, listOfSubjects;
     private AlertDialog.Builder alertDialog;
     private AlertDialog dialog;
     private LinearLayout linearLayout;
-    private List<String> allclassNameList, allsubjectNameList;
+    private static List<String> allclassNameList, allsubjectNameList;
     private TextInputLayout textInputLayout;
     private DatabaseReference instutiteRef = DatabaseLinks.baseReference;
     private Map<String, Object> map = new HashMap<>();
@@ -59,7 +61,10 @@ public class AddSubject extends AppCompatActivity {
     private TextInputEditText text;
     private Handler handler;
     private static final Map<String, List<String>> classSub = new HashMap<>();
-    private Map<String, List<String>> SubDetails;
+    private static Map<String, List<String>> subDetails;
+    private CircularProgressButton circularProgressButton;
+    private ProgressBar progressBar;
+    String classNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,46 +73,62 @@ public class AddSubject extends AppCompatActivity {
 
         Institute_ID = CatcheData.getData("Ins_id", this);
 
-        selectClass = findViewById(R.id.selectClass);
+        selectClass = findViewById(R.id.filled_exposed_dropdown);
         selectSubject = findViewById(R.id.selectSubject);
-        Submit = findViewById(R.id.submitSubject);
+        circularProgressButton = findViewById(R.id.progress_circular);
+        progressBar = findViewById(R.id.subProgress);
+
         listOfClassNames = getResources().getStringArray(R.array.className);
         listOfSubjects = getResources().getStringArray(R.array.subjectName);
 
         allclassNameList = new ArrayList<>(Arrays.asList(listOfClassNames));
         allsubjectNameList = new ArrayList<>(Arrays.asList(listOfSubjects));
 
+        //ArrayAdapter<String> classSelection = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item, allclassNameList);
+        ArrayAdapter<String> classSelection = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, allclassNameList);
 
-        handler = new Handler();
-        handler.postAtFrontOfQueue(() -> {
-            SubDetails = getSubjectDetails();
-        });
-
-        ArrayAdapter<String> classSelection = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item, allclassNameList);
-
-        ArrayAdapter<String> subjectSelection = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item, allsubjectNameList);
+        ArrayAdapter<String> subjectSelection = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, allsubjectNameList);
 
         selectClass.setAdapter(classSelection);
         selectSubject.setAdapter(subjectSelection);
-        Set<String> set = new HashSet<>();
-        selectClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        handler = new Handler();
+        handler.postAtFrontOfQueue(() -> {
+            progressBar.setVisibility(View.VISIBLE);
+            subDetails = getSubjectDetails();
+        });
+
+
+
+        /*allsubjectNameList.removeAll(allsubjectNameList);
+        allsubjectNameList.add("Select Subject");
+        allsubjectNameList.add("Add Subject");
+        if(subDetails!=null)
+            allsubjectNameList.addAll(subDetails.get(selectClass.getText().toString()));*/
+
+        selectClass.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 strClassName = adapterView.getItemAtPosition(i).toString();
-                List<String> list1 = SubDetails.get(strClassName);
-                if(SubDetails!=null && list1!=null) {
+
+                if (strClassName != "Select Class") {
+                    strSubjectName = "Select Subject";
+                    subjectSelection.notifyDataSetChanged();
+                }
+                List<String> list1 = subDetails.get(strClassName);
+
+                if (subDetails != null && list1 != null && !strClassName.equals("Add Class") && !strClassName.equals("Select Class")) {
                     allsubjectNameList.removeAll(allsubjectNameList);
                     allsubjectNameList.add("Select Subject");
                     allsubjectNameList.add("Add Subject");
-                    allsubjectNameList.addAll(SubDetails.get(strClassName));
-                }
-                else{
+                    allsubjectNameList.addAll(subDetails.get(strClassName));
+                } else if (!strClassName.equals("Add Class") && !strClassName.equals("Select Class")) {
                     allsubjectNameList.removeAll(allsubjectNameList);
                     allsubjectNameList.add("Select Subject");
                     allsubjectNameList.add("Add Subject");
                 }
 
-                if(strClassName.equals("Add Class")){
+                if (strClassName.equals("Add Class")) {
                     classes = addClasses();
                     linearLayout = new LinearLayout(AddSubject.this);
                     linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -115,12 +136,15 @@ public class AddSubject extends AppCompatActivity {
                     textInputLayout.setBoxBackgroundColor(Color.WHITE);
                     textInputLayout.addView(classes);
                     linearLayout.addView(textInputLayout);
-                    alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(AddSubject.this,R.style.Widget_AppCompat_ActionBar))
+                    alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(AddSubject.this, R.style.Widget_AppCompat_ActionBar))
                             .setTitle("Add Class Name")
-                            .setPositiveButton("Ok",(dialogInterface, which) -> {
+                            .setPositiveButton("Ok", (dialogInterface, which) -> {
                                 String className = classes.getText().toString();
-                                if(!className.isEmpty())
+                                if (!className.isEmpty()) {
                                     allclassNameList.add(className);
+                                    strClassName = className;
+                                    classSelection.notifyDataSetChanged();
+                                }
                             })
                             .setNegativeButton("Cancel", (DialogInterface dialogInterface, int j) -> {
                                 linearLayout.removeAllViews();
@@ -131,21 +155,19 @@ public class AddSubject extends AppCompatActivity {
                     dialog.setCancelable(false);
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.show();
+                    classSelection.notifyDataSetChanged();
                 }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                alertOrToastMsg.ToastMsg("Please Select any option");
             }
         });
 
-        selectSubject.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        selectSubject.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 strSubjectName = adapterView.getItemAtPosition(i).toString();
-
-                if(strSubjectName.equals("Add Subject")){
+                if (strClassName.equals("Select Class"))
+                    strSubjectName = "Select Subject";
+                subjectSelection.notifyDataSetChanged();
+                if (strSubjectName.equals("Add Subject")) {
                     subject = addSubjects();
                     alertDialog = new AlertDialog.Builder(getApplicationContext());
                     linearLayout = new LinearLayout(getApplicationContext());
@@ -154,17 +176,17 @@ public class AddSubject extends AppCompatActivity {
                     textInputLayout.setBoxBackgroundColor(Color.WHITE);
                     textInputLayout.addView(subject);
                     linearLayout.addView(textInputLayout);
-                    alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(AddSubject.this,R.style.Widget_AppCompat_ActionBar))
-                            .setTitle("Add Subject Name")
-                            .setPositiveButton("Ok",(dialogInterface, which) -> {
-                                String subName = subject.getText().toString();
-                                if(!subName.equals(""))
-                                    allsubjectNameList.add(subName);
-                                linearLayout.removeAllViews();
-                            })
-                            .setNegativeButton("Calcel", (dialogInterface, which)-> {
-                                linearLayout.removeAllViews();
-                            });
+                    alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(AddSubject.this, R.style.Widget_AppCompat_ActionBar))
+                        .setTitle("Add Subject Name")
+                        .setPositiveButton("Ok", (dialogInterface, which) -> {
+                            String subName = subject.getText().toString();
+                            if (!subName.equals(""))
+                                allsubjectNameList.add(subName);
+                            linearLayout.removeAllViews();
+                        })
+                        .setNegativeButton("Cancel", (dialogInterface, which) -> {
+                            linearLayout.removeAllViews();
+                        });
                     dialog = alertDialog.create();
                     dialog.setView(linearLayout);
                     dialog.setCancelable(false);
@@ -172,50 +194,65 @@ public class AddSubject extends AppCompatActivity {
                     dialog.show();
                 }
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                alertOrToastMsg.ToastMsg("Please Select any option");
-            }
         });
 
-        Submit.setOnClickListener((view) -> {
+        circularProgressButton.setOnClickListener((view) -> {
 
-            if(strClassName.equals("Select Class") || strSubjectName.equals("Select Subject") || strClassName.equals("Add Class") || strSubjectName.equals("Add Subject")){
+            strClassName = selectClass.getText().toString();
+            strSubjectName = selectSubject.getText().toString();
+
+            if (strClassName.equals("Select Class") || strSubjectName.equals("Select Subject")
+                    || strClassName.equals("Add Class") || strSubjectName.equals("Add Subject")) {
                 alertOrToastMsg.ToastMsg("Select Class and Subject");
                 return;
             }
 
+            circularProgressButton.setIndeterminateProgressMode(true); // turn on indeterminate progress
+            circularProgressButton.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
             linearLayout = new LinearLayout(this);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
             text = addFeeDetails();
             linearLayout.addView(text);
             alertDialog = new AlertDialog.Builder(this)
-                .setTitle("Select Fees")
-                .setPositiveButton("Ok", (dialogInterface, i) -> {
-                    String fees = text.getText().toString();
+                    .setTitle("Select Fees")
+                    .setPositiveButton("Ok", (dialogInterface, i) -> {
+                        String fees = text.getText().toString();
                         instutiteRef.child(Institute_ID).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.hasChild(Node.Subject.toString())){
+                                circularProgressButton.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
+                                circularProgressButton.setProgress(100); // set progress to 100 or -1 to indicate complete or error state
+                                if (dataSnapshot.hasChild(Node.Subject.toString())) {
                                     map.put(strSubjectName, fees);
                                     instutiteRef.child(Institute_ID).child(Node.Subject.toString()).child(strClassName).updateChildren(map,
                                             (@Nullable @org.jetbrains.annotations.Nullable DatabaseError databaseError, @NonNull @NotNull DatabaseReference databaseReference) -> {
-                                                if(databaseReference.child(strSubjectName).getKey().equals(strSubjectName)
-                                                        && databaseReference.getKey().equals(strClassName)){
+                                                if (databaseReference.child(strSubjectName).getKey().equals(strSubjectName)
+                                                        && databaseReference.getKey().equals(strClassName)) {
+                                                    circularProgressButton.setProgress(100); // set progress to 100 or -1 to indicate complete or error state
                                                     dialogInterface.dismiss();
                                                     linearLayout.removeAllViews();
                                                     alertOrToastMsg.ToastMsg("Values Inserted Successfully...!");
-                                                }
-                                                else{
+                                                    try {
+                                                        Thread.sleep(1000);
+                                                    } catch (InterruptedException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    circularProgressButton.setProgress(0); // set progress to 0 to switch back to normal state
+                                                } else {
+                                                    circularProgressButton.setProgress(-1); // set progress to 100 or -1 to indicate complete or error state
+                                                    try {
+                                                        Thread.sleep(1000);
+                                                    } catch (InterruptedException e) {
+                                                        e.printStackTrace();
+                                                    }
                                                     dialogInterface.dismiss();
                                                     linearLayout.removeAllViews();
                                                     alertOrToastMsg.ToastMsg("Error in inserting values");
+                                                    circularProgressButton.setProgress(0); // set progress to 0 to switch back to normal state
                                                 }
                                             });
                                     map.clear();
-                                }
-                                else{
+                                } else {
                                     dialogInterface.dismiss();
                                     linearLayout.removeAllViews();
                                     DoInitialProcess(strSubjectName, strClassName, fees);
@@ -225,11 +262,19 @@ public class AddSubject extends AppCompatActivity {
                             @Override
                             public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
                                 alertOrToastMsg.showAlert("Error", databaseError.toString());
+                                circularProgressButton.setProgress(-1); // set progress to 100 or -1 to indicate complete or error state
+                                circularProgressButton.setImeOptions(5);
+                                circularProgressButton.setProgress(0); // set progress to 0 to switch back to normal state
                             }
                         });
                     })
                     .setNegativeButton("Cancel", (dialogInterface, i) -> {
+                        circularProgressButton.setProgress(-1); // set progress to 100 or -1 to indicate complete or error state
                         linearLayout.removeAllViews();
+                        circularProgressButton.setImeOptions(View.TEXT_DIRECTION_INHERIT);
+                        circularProgressButton.setProgress(0); // set progress to 0 to switch back to normal state
+                        strClassName = "Select Class";
+                        classSelection.notifyDataSetChanged();
                     });
             dialog = alertDialog.create();
             dialog.setView(linearLayout);
@@ -237,7 +282,7 @@ public class AddSubject extends AppCompatActivity {
             dialog.setCancelable(false);
             dialog.show();
 
-            alertOrToastMsg.ToastMsg("Class Name:"+strClassName+" Subject Name:"+strSubjectName);
+            alertOrToastMsg.ToastMsg("Class Name:" + strClassName + " Subject Name:" + strSubjectName);
         });
     }
 
@@ -255,10 +300,10 @@ public class AddSubject extends AppCompatActivity {
                             subNames.add(subName);
                             classSub.put(className, subNames);
                         }
-
                     }
                     System.out.println("Subject Details are "+classSub);
                 }
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -277,10 +322,17 @@ public class AddSubject extends AppCompatActivity {
                     map.put(subjectName,fees);
                     instutiteRef.child(Institute_ID).child(Node.Subject.toString()).child(className).setValue(map,
                             (@Nullable @org.jetbrains.annotations.Nullable DatabaseError databaseError, @NonNull @NotNull DatabaseReference databaseReference) -> {
-                        if(databaseReference.getKey().equals(map.get("subjectName")))
+                        if(databaseReference.getKey().equals(map.get("subjectName"))){
                             alertOrToastMsg.ToastMsg("Values Inserted Successfully...!"+databaseReference.toString());
-                        if(databaseError!=null)
+                            circularProgressButton.setProgress(100); // set progress to 100 or -1 to indicate complete or error state
+                            circularProgressButton.setProgress(0); // set progress to 0 to switch back to normal state
+                        }
+
+                        if(databaseError!=null){
+                            circularProgressButton.setProgress(-1); // set progress to 100 or -1 to indicate complete or error state
                             alertOrToastMsg.showAlert("Error", databaseError.toString());
+                            circularProgressButton.setProgress(0); // set progress to 0 to switch back to normal state
+                        }
                     });
                 }
                 map.clear();

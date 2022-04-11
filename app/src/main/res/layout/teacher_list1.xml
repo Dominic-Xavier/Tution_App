@@ -85,7 +85,7 @@
                 android:text="Students Progress" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/attendence"
+                android:id="@+id/attendance"
                 android:layout_width="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginBottom="10dp"

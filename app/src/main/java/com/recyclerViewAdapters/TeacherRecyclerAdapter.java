@@ -29,6 +29,7 @@ public class TeacherRecyclerAdapter extends RecyclerView.Adapter<TeacherRecycler
     private FloatingActionButton floatingActionButton;
     private List<String> checkData = new ArrayList<>();
     private TopicListener topicListener;
+    private static boolean isCheckBoxChecked = false;
 
     public TeacherRecyclerAdapter(List<String> date, List<String> titles, List<String> subject, List<String> taskIDs,
                                   OnTask onTask, TopicListener topicListener){
@@ -53,16 +54,27 @@ public class TeacherRecyclerAdapter extends RecyclerView.Adapter<TeacherRecycler
         holder.teacher_date.setText(date.get(position));
         holder.teacher_title.setText(titles.get(position));
         holder.teacher_subject.setText(subject.get(position));
-        holder.checkBox.setOnCheckedChangeListener((CompoundButton compoundButton, boolean isChecked) -> {
+        final CheckBox checkBox = holder.checkBox;
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                isCheckBoxChecked = b;
+                checkBox.setChecked(isCheckBoxChecked);
+            }
+        });
+        checkBox.setOnCheckedChangeListener((CompoundButton compoundButton, boolean isChecked) -> {
             actionButton = StudentTask.getActionButton();
             floatingActionButton = Teacher_task.getActionButton();
             if(actionButton==null && floatingActionButton==null)
                 return;
-            if(isChecked)
+            if(isChecked){
+                //checkBox.setChecked(true);
                 checkData.add(taskIDs.get(position));
-            else
+            }
+            else{
+                //checkBox.setChecked(false);
                 checkData.remove(taskIDs.get(position));
-
+            }
             if(actionButton!=null){
                 if(checkData.size()!=0){
                     actionButton.setVisibility(View.VISIBLE);
@@ -96,14 +108,6 @@ public class TeacherRecyclerAdapter extends RecyclerView.Adapter<TeacherRecycler
             linearLayout = itemView.findViewById(R.id.teacher_layout);
             linearLayout.setOnClickListener((v) -> {
                 onTask.onClick(getAdapterPosition());
-            });
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    checkBox.setChecked(true);
-                    notifyItemChanged(getAdapterPosition());
-                    return true;
-                }
             });
         }
     }

@@ -64,7 +64,7 @@ public class AddSubject extends AppCompatActivity {
     private static Map<String, List<String>> subDetails;
     private CircularProgressButton circularProgressButton;
     private ProgressBar progressBar;
-    String classNames;
+    private static final List<AllClasses> allClassNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +83,11 @@ public class AddSubject extends AppCompatActivity {
 
         allclassNameList = new ArrayList<>(Arrays.asList(listOfClassNames));
         allsubjectNameList = new ArrayList<>(Arrays.asList(listOfSubjects));
+        fillAutoCompleteText();
 
-        //ArrayAdapter<String> classSelection = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item, allclassNameList);
         ArrayAdapter<String> classSelection = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, allclassNameList);
+
+        //AutoCompleteTextViewDesign autoCompleteTextViewDesign = new AutoCompleteTextViewDesign(this,R.layout.add_subject_design, allClassNames);
 
         ArrayAdapter<String> subjectSelection = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, allsubjectNameList);
 
@@ -98,8 +100,6 @@ public class AddSubject extends AppCompatActivity {
             subDetails = getSubjectDetails();
         });
 
-
-
         /*allsubjectNameList.removeAll(allsubjectNameList);
         allsubjectNameList.add("Select Subject");
         allsubjectNameList.add("Add Subject");
@@ -110,7 +110,7 @@ public class AddSubject extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 strClassName = adapterView.getItemAtPosition(i).toString();
-
+                //alertOrToastMsg.ToastMsg(strClassName);
                 if (strClassName != "Select Class") {
                     strSubjectName = "Select Subject";
                     subjectSelection.notifyDataSetChanged();
@@ -121,6 +121,9 @@ public class AddSubject extends AppCompatActivity {
                     allsubjectNameList.removeAll(allsubjectNameList);
                     allsubjectNameList.add("Select Subject");
                     allsubjectNameList.add("Add Subject");
+                    for (String str : allsubjectNameList) {
+                        allClassNames.add(new AllClasses(str));
+                    }
                     allsubjectNameList.addAll(subDetails.get(strClassName));
                 } else if (!strClassName.equals("Add Class") && !strClassName.equals("Select Class")) {
                     allsubjectNameList.removeAll(allsubjectNameList);
@@ -141,9 +144,16 @@ public class AddSubject extends AppCompatActivity {
                             .setPositiveButton("Ok", (dialogInterface, which) -> {
                                 String className = classes.getText().toString();
                                 if (!className.isEmpty()) {
-                                    allclassNameList.add(className);
-                                    strClassName = className;
-                                    classSelection.notifyDataSetChanged();
+                                    boolean isPresent = false;
+                                    for (String classNames:allclassNameList) {
+                                        if(className.equals(classNames)){
+                                            alertOrToastMsg.ToastMsg("Task is already present...!");
+                                            isPresent = true;
+                                            break;
+                                        }
+                                    }
+                                    if(!isPresent)
+                                        allclassNameList.add(className);
                                 }
                             })
                             .setNegativeButton("Cancel", (DialogInterface dialogInterface, int j) -> {
@@ -164,9 +174,7 @@ public class AddSubject extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 strSubjectName = adapterView.getItemAtPosition(i).toString();
-                if (strClassName.equals("Select Class"))
-                    strSubjectName = "Select Subject";
-                subjectSelection.notifyDataSetChanged();
+
                 if (strSubjectName.equals("Add Subject")) {
                     subject = addSubjects();
                     alertDialog = new AlertDialog.Builder(getApplicationContext());
@@ -180,8 +188,18 @@ public class AddSubject extends AppCompatActivity {
                         .setTitle("Add Subject Name")
                         .setPositiveButton("Ok", (dialogInterface, which) -> {
                             String subName = subject.getText().toString();
-                            if (!subName.equals(""))
-                                allsubjectNameList.add(subName);
+                            if (!subName.equals("")){
+                                boolean isPresent = false;
+                                for (String  subjects : allsubjectNameList) {
+                                    if(subjects.equals(subName)){
+                                        alertOrToastMsg.ToastMsg("Subject Already Present...!");
+                                        isPresent = true;
+                                        break;
+                                    }
+                                }
+                                if(!isPresent)
+                                    allsubjectNameList.add(subName);
+                            }
                             linearLayout.removeAllViews();
                         })
                         .setNegativeButton("Cancel", (dialogInterface, which) -> {
@@ -202,7 +220,8 @@ public class AddSubject extends AppCompatActivity {
             strSubjectName = selectSubject.getText().toString();
 
             if (strClassName.equals("Select Class") || strSubjectName.equals("Select Subject")
-                    || strClassName.equals("Add Class") || strSubjectName.equals("Add Subject")) {
+                    || strClassName.equals("Add Class") || strSubjectName.equals("Add Subject")
+                    ||strClassName.equals("") || strSubjectName.equals("")) {
                 alertOrToastMsg.ToastMsg("Select Class and Subject");
                 return;
             }
@@ -294,6 +313,7 @@ public class AddSubject extends AppCompatActivity {
                     for (DataSnapshot classNames : dataSnapshot.child(Node.Subject.toString()).getChildren()) {
                         String className = classNames.getKey();
                         allclassNameList.add(className);
+                        allClassNames.add(new AllClasses(className));
                         List<String> subNames = new ArrayList<>();
                         for (DataSnapshot sub : dataSnapshot.child(Node.Subject.toString()).child(className).getChildren()) {
                             String subName = sub.getKey();
@@ -369,6 +389,11 @@ public class AddSubject extends AppCompatActivity {
         textInputEditText.setTextSize(20);
         textInputEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
         return textInputEditText;
+    }
+
+    private void fillAutoCompleteText(){
+        allClassNames.add(new AllClasses("Select Class"));
+        allClassNames.add(new AllClasses("Add Class"));
     }
 
     @Override

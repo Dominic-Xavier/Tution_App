@@ -12,50 +12,83 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/add_students"
-        android:layout_width="match_parent"
-        android:layout_marginRight="15dp"
-        android:background="@drawable/box_button"
-        android:drawableTop="@drawable/add_student"
-        android:minWidth="100dp"
-        android:minHeight="100dp"
-        android:text="Add Students" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/add_parent"
-        android:layout_width="match_parent"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginLeft="15dp"
-        android:background="@drawable/box_button"
-        android:drawableTop="@drawable/add_parents"
-        android:minWidth="100dp"
-        android:minHeight="100dp"
-        android:text="Add Parent" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/assignTask"
+            android:id="@+id/add_students"
             android:layout_width="match_parent"
             android:layout_marginRight="15dp"
             android:background="@drawable/box_button"
+            android:drawableTop="@drawable/add_student"
             android:minWidth="100dp"
             android:minHeight="100dp"
-            android:drawableTop="@drawable/assign_task"
-            android:text="Assign Task" />
+            android:text="Add Students" />
 
-    </TableRow>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/add_parent"
+            android:layout_width="match_parent"
+            android:height="0dp"
+            android:background="@drawable/box_button"
+            android:drawableTop="@drawable/add_parents"
+            android:minWidth="100dp"
+            android:minHeight="100dp"
+            android:text="Add Parent" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/assignTask"
+                android:layout_width="match_parent"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/box_button"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:drawableTop="@drawable/assign_task"
+                android:text="Assign Task" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/liveClass"
+                android:layout_width="match_parent"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/box_button"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:drawableTop="@drawable/icons8_live_class_64"
+                android:text="live Classes"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/chat"
+                android:layout_width="match_parent"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/box_button"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:drawableTop="@drawable/icons8_chat_message_sent_64"
+                android:text="Chat" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/downloads"
+                android:layout_width="match_parent"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/box_button"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:drawableTop="@drawable/icons8_downloads_folder_64"
+                android:text="Downloads"/>
+        </TableRow>
     </TableLayout>
 
 </FrameLayout>

@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="ghots_white">#f8f8ff</color>
     <color name="grey">#808080</color>
+    <color name="boneWhite">#F9F6EE</color>
+    <color name="liteWhite">#FAF9F6</color>
 </resources>

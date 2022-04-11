@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TutionApp">
         <activity
+            android:name=".StudyMaterials"
+            android:exported="false" />
+        <activity
             android:name=".Teacher_Attendance"
             android:exported="false" />
         <activity

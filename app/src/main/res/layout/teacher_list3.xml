@@ -5,10 +5,45 @@
     android:layout_height="match_parent"
     tools:context=".list3">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:stretchColumns="*"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/add_notes"
+                    android:layout_width="wrap_content"
+                    android:background="@drawable/box_button"
+                    android:drawableTop="@drawable/icons8_notes_64"
+                    android:minWidth="100dp"
+                    android:minHeight="100dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Notes" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/payment"
+                    android:layout_width="wrap_content"
+                    android:background="@drawable/box_button"
+                    android:drawableTop="@drawable/icons8_payment_64"
+                    android:minWidth="100dp"
+                    android:minHeight="100dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Payment" />
+
+            </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"/>
+
+    </TableLayout>
 
 </FrameLayout>

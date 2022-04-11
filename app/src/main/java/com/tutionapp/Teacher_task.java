@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.common.AlertOrToastMsg;
+import com.common.DateFunctions;
 import com.dataHelper.TaskDetails;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.recyclerViewAdapters.TeacherRecyclerAdapter;
@@ -115,15 +116,15 @@ public class Teacher_task extends AppCompatActivity {
                         txtDescription = txtTextArea.getText().toString();
                         txtSubject = subject.getText().toString();
 
-                        task.put("Date", txtdates);
+                        task.put("DateFunctions", txtdates);
                         task.put("Topic", txttitle);
                         task.put("Description", txtDescription);
                         task.put("Subject", txtSubject);
                         task.put("Status", "InProgress");
                         taskDetails = new TaskDetails(Teacher_task.this, task);
 
-                        if(!taskDetails.validformat(txtdates)){
-                            Toast.makeText(this, "Invalid Date format", Toast.LENGTH_SHORT).show();
+                        if(!DateFunctions.validateDateFormat(txtdates)){
+                            Toast.makeText(this, "Invalid DateFunctions format", Toast.LENGTH_SHORT).show();
                             return;
                         }
 

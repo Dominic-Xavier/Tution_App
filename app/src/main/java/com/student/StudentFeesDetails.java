@@ -61,7 +61,7 @@ public class StudentFeesDetails extends AppCompatActivity {
                         String date = getDate.getText().toString();
                         String fees = getFees.getText().toString();
                         if(!date.isEmpty() && !fees.isEmpty())
-                            alertOrToastMsg.ToastMsg("Date "+date+" Fees "+fees);
+                            alertOrToastMsg.ToastMsg("DateFunctions "+date+" Fees "+fees);
                         linearLayout.removeAllViews();
                     })
                     .setNegativeButton("Calcel", (dialogInterface, i) -> {
@@ -77,7 +77,7 @@ public class StudentFeesDetails extends AppCompatActivity {
 
     private TextView displayDate(){
         TextView tv = new TextView(this);
-        tv.setText("Date");
+        tv.setText("DateFunctions");
         tv.setTextSize(20);
         tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         return tv;
@@ -103,7 +103,7 @@ public class StudentFeesDetails extends AppCompatActivity {
     public TextInputEditText addDate(){
         TextInputEditText textInputEditText = new TextInputEditText(new ContextThemeWrapper(StudentFeesDetails.this,
                 R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox_Dense));
-        textInputEditText.setHint("Enter Date");
+        textInputEditText.setHint("Enter DateFunctions");
         textInputEditText.setTextSize(20);
         textInputEditText.setInputType(InputType.TYPE_CLASS_DATETIME);
         return textInputEditText;

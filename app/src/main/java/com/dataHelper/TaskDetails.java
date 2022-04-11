@@ -118,28 +118,6 @@ public class TaskDetails implements TeacherRecyclerAdapter.OnTask, TopicListener
         });
     }
 
-    public Boolean validformat(String date) {
-        Boolean b;
-        try {
-            Date d;
-            final String Dateformat = "dd-mm-yyyy";
-            DateFormat df = new SimpleDateFormat(Dateformat);
-            df.setLenient(false);
-            d = df.parse(date);
-            String split[] = date.split("-");
-            int dte = Integer.parseInt(split[0]);
-            int month = Integer.parseInt(split[1]);
-            int year = Integer.parseInt(split[2]);
-            if (date.equals(df.format(d)) && dte<=31 && month<=12 && year<9999)
-                b = true;
-            else
-                b = false;
-        } catch (ParseException e) {
-            b = false;
-        }
-        return b;
-    }
-
     public Map<String, List<String>> getTaskDetails(String stu_id, RecyclerView recyclerView){
 
         studentReference.child(insID).child(Node.Student.toString()).child(stu_id)

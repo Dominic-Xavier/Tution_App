@@ -76,13 +76,11 @@ public class list1 extends Fragment {
             startActivity(intent);
         });
 
-        attendance = getView().findViewById(R.id.attendence);
+        attendance = getView().findViewById(R.id.attendance);
         attendance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(getActivity(), AllStudentsList.class);
-                intent.putExtra("keyword", "Attendance");
-                startActivity(intent);
+                startActivity(new Intent(getActivity(), Teacher_Attendance.class));
             }
         });
     }

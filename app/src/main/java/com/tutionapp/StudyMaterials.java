@@ -1,34 +1,50 @@
 package com.tutionapp;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.AnyRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.DialogInterface;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+
 import android.view.View;
-import android.widget.AbsListView;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
-import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.common.AlertOrToastMsg;
 import com.dataHelper.CatcheData;
-import com.dataHelper.DatabaseLinks;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.dataHelper.FolderCRUDOperations;
+import com.fileViewer.ImageViewer;
+import com.fileViewer.PDFViewer;
+import com.fileViewer.VideoViewer;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import com.gridViewAdapter.Folder;
-import com.gridViewAdapter.FolderAdapter;
 import com.gridViewAdapter.FolderClass;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.recyclerViewAdapters.FileListener;
+import com.recyclerViewAdapters.FolderAdapter;
 import com.tuann.floatingactionbuttonexpandable.FloatingActionButtonExpandable;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,15 +55,17 @@ public class StudyMaterials extends AppCompatActivity implements Folder {
     private FloatingActionButtonExpandable actionButtonExpandable;
     private AlertDialog.Builder builder;
     private LinearLayout linearLayout;
-    private GridView gridView;
-    private FolderAdapter folderAdapter;
+    private static RecyclerView gridView;
     private List<String> folderNAme;
 
-    int myLastVisiblePos;
-    private AlertOrToastMsg alertOrToastMsg;
+    private static AlertOrToastMsg alertOrToastMsg;
     private static final Map<String, List<String>> folders = new HashMap<>();
     private Handler handler;
-    private StorageReference reference;
+    ActivityResultLauncher mGetContent;
+    private static final int ImageForLoading = R.drawable.icons8_file_512;
+    private static FolderCRUDOperations folderCRUDOperations;
+    private static GridLayoutManager gridLayoutManager;
+    private ProgressBar progressBar;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -55,52 +73,67 @@ public class StudyMaterials extends AppCompatActivity implements Folder {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.studymaterials);
 
+        actionButtonExpandable = findViewById(R.id.createFolder);
+        gridView = findViewById(R.id.recycler_Grid_View);
+        progressBar = findViewById(R.id.loadFiles);
         alertOrToastMsg = new AlertOrToastMsg(this);
-        gridView = findViewById(R.id.grid_view);
+
+        handler = new Handler();
+        handler.postAtFrontOfQueue(() -> {
+            //Load the folder details
+            folderCRUDOperations = new FolderCRUDOperations(StudyMaterials.this,
+                    CatcheData.getData("Ins_id", StudyMaterials.this), progressBar);
+            ImageLoader.getInstance().init(getConfig());
+            progressBar.setVisibility(View.VISIBLE);
+            folderCRUDOperations.getAllFiles();
+        });
+
+        mGetContent = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            result-> {
+                progressBar.setVisibility(View.VISIBLE);
+                folderCRUDOperations.insertData(result);
+                //This commented code is for GridView Adapter
+                /*folderAdapter = new FolderAdapter(StudyMaterials.this, folderNAme, StudyMaterials.this, folders, uriList);
+                gridView.setAdapter(folderAdapter);*/
+
+            });
 
         String folder = getIntent().getStringExtra("FolderNAme");
         folderNAme = new ArrayList<>();
+        String folderPath = null;
         if(folder!=null){
-            FolderClass.loadData(folder, folderNAme);
-            FolderClass.folderPath(folder);
+            folderPath = FolderClass.getFolderPath();
+            alertOrToastMsg.ToastMsg("Folder Path: "+folderPath);
         }
 
         List<String> listFolder = FolderClass.getSubFolder(folder);
         if(listFolder!=null)
             folderNAme.addAll(listFolder);
 
-        actionButtonExpandable = findViewById(R.id.createFolder);
-
-        alertOrToastMsg.ToastMsg("Folder "+folder);
-
-        folderAdapter = new FolderAdapter(this, folderNAme, StudyMaterials.this, folders);
-        gridView.setAdapter(folderAdapter);
-        gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        gridView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                int currentFirstVisPos = absListView.getFirstVisiblePosition();
-                if(currentFirstVisPos > myLastVisiblePos)
-                    //scroll down
-                    actionButtonExpandable.collapse(true);
-                if(currentFirstVisPos < myLastVisiblePos)
-                    //scroll up
-                    actionButtonExpandable.expand(true);
-                myLastVisiblePos = currentFirstVisPos;
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            if(dy>0)
+                actionButtonExpandable.collapse(true);
+            else
+                actionButtonExpandable.expand(true);
             }
         });
 
         actionButtonExpandable.setOnClickListener((v) -> {
-            linearLayout = new LinearLayout(StudyMaterials.this);
-            linearLayout.setOrientation(LinearLayout.VERTICAL);
-            EditText editText = getFolderName();
-            linearLayout.addView(editText);
-            builder = new AlertDialog.Builder(StudyMaterials.this);
-            builder.setTitle("Create Folder")
+
+            BottomSheetDialog bottomView = new BottomSheetDialog(StudyMaterials.this);
+            bottomView.setContentView(R.layout.bottom_view);
+            ImageButton uploadFolder = bottomView.findViewById(R.id.create_folder);
+            ImageButton uploadFile = bottomView.findViewById(R.id.uploadFile);
+            uploadFolder.setOnClickListener((vi) -> {
+                linearLayout = new LinearLayout(StudyMaterials.this);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                EditText editText = getFolderName();
+                linearLayout.addView(editText);
+                builder = new AlertDialog.Builder(StudyMaterials.this);
+                builder.setTitle("Create Folder")
                     .setPositiveButton("Create", (dialogInterface, i) -> {
                             String folderName = editText.getText().toString();
                             if(folderName.isEmpty() || folderName==null)
@@ -114,11 +147,19 @@ public class StudyMaterials extends AppCompatActivity implements Folder {
                         linearLayout.removeAllViews();
                         linearLayout = null;
                     });
-            AlertDialog dialog = builder.create();
-            dialog.setView(linearLayout);
-            dialog.setCancelable(false);
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.show();
+                AlertDialog dialog = builder.create();
+                dialog.setView(linearLayout);
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
+                bottomView.cancel();
+            });
+
+            uploadFile.setOnClickListener((View view) -> {
+                mGetContent.launch("*/*");
+                bottomView.cancel();
+            });
+            bottomView.show();
         });
     }
 
@@ -143,9 +184,48 @@ public class StudyMaterials extends AppCompatActivity implements Folder {
         folderNAme.addAll(foldersList);
     }
 
+    public ImageLoaderConfiguration getConfig(){
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                .showImageOnLoading(ImageForLoading)
+                .cacheOnDisk(true).cacheInMemory(true)
+                .cacheOnDisk(true).resetViewBeforeLoading(true)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .displayer(new FadeInBitmapDisplayer(300)).build();
+        ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(getApplicationContext())
+                .defaultDisplayImageOptions(defaultOptions)
+                .memoryCache(new WeakMemoryCache())
+                .diskCacheSize(100 * 1024 * 1024)
+                .build();
+        return configuration;
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    /**
+     * get uri to drawable or any other resource type if u wish
+     * @param context - context
+     * @param drawableId - drawable res id
+     * @return - uri
+     */
+    public static final Uri getUriToDrawable(@NonNull Context context,
+                                             @AnyRes int drawableId) {
+        Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
+                + "://" + context.getResources().getResourcePackageName(drawableId)
+                + '/' + context.getResources().getResourceTypeName(drawableId)
+                + '/' + context.getResources().getResourceEntryName(drawableId) );
+        return imageUri;
+    }
+
+
+
+    public static void recyclerViewAdapter(Context context, List<Uri> list, FileListener fileListener){
+        FolderAdapter folderAdapter  = new FolderAdapter(context, list, fileListener);
+        gridView.setAdapter(folderAdapter);
+        gridLayoutManager = new GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false);
+        gridView.setLayoutManager(gridLayoutManager);
     }
 }

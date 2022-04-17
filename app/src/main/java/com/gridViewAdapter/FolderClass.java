@@ -1,14 +1,16 @@
 package com.gridViewAdapter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FolderClass {
+public class FolderClass{
 
     private static final Map<String, List<String>> folderList = new HashMap<>();
     private static final Map<String, String> folderNameList = new HashMap<>();
-    private static final StringBuffer stringBuffer = new StringBuffer();
+    private static StringBuffer path = new StringBuffer();
+    private static final List<String> list = new ArrayList<>();
 
     public static void loadData(String parentFolder, List<String> subFolders){
         folderList.put(parentFolder, subFolders);
@@ -19,12 +21,13 @@ public class FolderClass {
         return folder;
     }
 
-    public static void folderPath(String folderName){
-        stringBuffer.append(folderName+"/");
-        folderNameList.put(folderName, stringBuffer.toString());
+    public static void getFolderPath(String folderName){
+        list.add(folderName+"/");
     }
 
-    public static String getPath(String folderName){
-        return folderNameList.get(folderName);
+    public static String getFolderPath(){
+        for (String folders : list)
+            path.append(folders+"/");
+        return path.toString();
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/bottomLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_view_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageButton
+        android:id="@+id/create_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/white"
+        android:src="@drawable/ic_create_new_folder_64"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/folderName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Folder"
+        app:layout_constraintEnd_toEndOf="@+id/create_folder"
+        app:layout_constraintStart_toStartOf="@+id/create_folder"
+        app:layout_constraintTop_toBottomOf="@+id/create_folder" />
+
+    <ImageButton
+        android:id="@+id/uploadFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginRight="70dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/ic_baseline_cloud_upload_64"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload File"
+        app:layout_constraintEnd_toEndOf="@+id/uploadFile"
+        app:layout_constraintStart_toStartOf="@+id/uploadFile"
+        app:layout_constraintTop_toBottomOf="@+id/uploadFile" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

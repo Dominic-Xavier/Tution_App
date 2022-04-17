@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tutionapp">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/pngtree_school_education_logo_png_image_4136147"
@@ -10,13 +13,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TutionApp">
         <activity
+            android:name="com.fileViewer.PDFViewer"
+            android:exported="false" />
+        <activity
+            android:name="com.fileViewer.VideoViewer"
+            android:exported="false" />
+        <activity
+            android:name="com.fileViewer.ImageViewer"
+            android:exported="false" />
+        <activity
             android:name=".StudyMaterials"
             android:exported="false" />
         <activity
             android:name=".Teacher_Attendance"
-            android:exported="false" />
-        <activity
-            android:name=".attendence"
             android:exported="false" />
         <activity android:name="com.student.StudentFeesDetails" />
         <activity android:name=".FeesDetails" />

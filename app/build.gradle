@@ -54,6 +54,10 @@ dependencies {
     implementation 'com.github.imtuann:FloatingActionButtonExpandable:1.1.2'
     implementation "com.github.dmytrodanylyk:circular-progress-button:1.2"
     implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    implementation 'com.github.MikeOrtiz:TouchImageView:1.4.1'
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

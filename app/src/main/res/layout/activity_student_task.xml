@@ -42,7 +42,7 @@
         android:clickable="false"
         android:visibility="invisible"
         app:fab_content="Finished"
-        app:fab_duration="500"
+        app:fab_duration="200"
         app:fab_icon="@drawable/ic_check"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

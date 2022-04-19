@@ -77,6 +77,7 @@ public class StudyMaterials extends AppCompatActivity implements Folder {
         gridView = findViewById(R.id.recycler_Grid_View);
         progressBar = findViewById(R.id.loadFiles);
         alertOrToastMsg = new AlertOrToastMsg(this);
+        gridView.setVisibility(View.GONE);
 
         handler = new Handler();
         handler.postAtFrontOfQueue(() -> {
@@ -85,14 +86,14 @@ public class StudyMaterials extends AppCompatActivity implements Folder {
                     CatcheData.getData("Ins_id", StudyMaterials.this), progressBar);
             ImageLoader.getInstance().init(getConfig());
             progressBar.setVisibility(View.VISIBLE);
-            folderCRUDOperations.getAllFiles();
+            folderCRUDOperations.getAllFiles(gridView);
         });
 
         mGetContent = registerForActivityResult(
             new ActivityResultContracts.GetContent(),
             result-> {
                 progressBar.setVisibility(View.VISIBLE);
-                folderCRUDOperations.insertData(result);
+                folderCRUDOperations.insertData(result, gridView);
                 //This commented code is for GridView Adapter
                 /*folderAdapter = new FolderAdapter(StudyMaterials.this, folderNAme, StudyMaterials.this, folders, uriList);
                 gridView.setAdapter(folderAdapter);*/
@@ -222,10 +223,10 @@ public class StudyMaterials extends AppCompatActivity implements Folder {
 
 
 
-    public static void recyclerViewAdapter(Context context, List<Uri> list, FileListener fileListener){
+    public static void recyclerViewAdapter(Context context, List<Uri> list, FileListener fileListener, RecyclerView recyclerView){
         FolderAdapter folderAdapter  = new FolderAdapter(context, list, fileListener);
-        gridView.setAdapter(folderAdapter);
+        recyclerView.setAdapter(folderAdapter);
         gridLayoutManager = new GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false);
-        gridView.setLayoutManager(gridLayoutManager);
+        recyclerView.setLayoutManager(gridLayoutManager);
     }
 }

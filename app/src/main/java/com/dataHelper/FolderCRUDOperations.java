@@ -49,30 +49,35 @@ public class FolderCRUDOperations implements FileListener {
         });
     }
 
-    public void insertData(Uri uri){
+    public void insertData(Uri uri, RecyclerView recyclerView){
         StorageReference storageReference = DatabaseLinks.getInstituteRef(ins_id);
         long milliSec =  System.currentTimeMillis();
-        String imageName = milliSec+"."+getFileExtension(uri);
-        alertOrToastMsg.ToastMsg(imageName);
-        storageReference.child(imageName).putFile(uri).addOnSuccessListener((UploadTask.TaskSnapshot taskSnapshot) -> {
-            alertOrToastMsg.ToastMsg("File saved Successfully....!");
-            getAllFiles();
-        }).addOnFailureListener((@NonNull Exception e) -> {
-            alertOrToastMsg.showAlert("Error", e.getMessage());
+
+        if(uri!=null){
+            recyclerView.setVisibility(View.GONE);
+            String imageName = milliSec+"."+getFileExtension(uri);
+            storageReference.child(imageName).putFile(uri).addOnSuccessListener((UploadTask.TaskSnapshot taskSnapshot) -> {
+                getAllFiles(recyclerView);
+                alertOrToastMsg.ToastMsg("File saved Successfully....!");
+            }).addOnFailureListener((@NonNull Exception e) -> {
+                alertOrToastMsg.showAlert("Error", e.getMessage());
+                progressBar.setVisibility(View.GONE);
+            });
+        }
+        else
             progressBar.setVisibility(View.GONE);
-        });
 
     }
 
-    public void getAllFiles(){
+    public void getAllFiles(RecyclerView recyclerView){
         StorageReference storageReference = DatabaseLinks.getInstituteRef(ins_id);
         storageReference.listAll().addOnSuccessListener((ListResult listResult) -> {
-            alertOrToastMsg.showAlert("Link", "entered "+listResult.getPrefixes());
             uriList = new ArrayList<>();
             for (StorageReference fileRef : listResult.getItems()) {
+                recyclerView.setVisibility(View.VISIBLE);
                 fileRef.getDownloadUrl().addOnSuccessListener((Uri uri) -> {
                     uriList.add(uri);
-                    StudyMaterials.recyclerViewAdapter(context, uriList, FolderCRUDOperations.this::onClick);
+                    StudyMaterials.recyclerViewAdapter(context, uriList, FolderCRUDOperations.this::onClick, recyclerView);
                 });
             }
             //StudyMaterials.recyclerViewAdapter(context, uriList, FolderCRUDOperations.this::onClick);

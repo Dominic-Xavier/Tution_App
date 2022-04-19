@@ -1,14 +1,19 @@
 package com.fileViewer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.common.AlertOrToastMsg;
 import com.ortiz.touchview.TouchImageView;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 import com.tutionapp.R;
 
 import java.io.IOException;
@@ -18,6 +23,7 @@ import java.net.URL;
 public class ImageViewer extends AppCompatActivity {
 
     TouchImageView imageView;
+    ProgressBar progressBar;
     AlertOrToastMsg alertOrToastMsg = new AlertOrToastMsg(this);
 
     @Override
@@ -26,20 +32,21 @@ public class ImageViewer extends AppCompatActivity {
         setContentView(R.layout.activity_image_viewer);
 
         imageView = findViewById(R.id.imageViewer);
+        progressBar = findViewById(R.id.loadingImage);
 
         String imageUri = getIntent().getStringExtra("image");
-        alertOrToastMsg.showAlert("URL", imageUri);
 
-        try {
-            URL url = new URL(imageUri);
-            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            imageView.setImageBitmap(bmp);
-        } catch (Exception e) {
-            //alertOrToastMsg.showAlert("Error Occurred", e.getMessage());
-            e.printStackTrace();
-        }
+        Picasso.get().load(imageUri).into(imageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                progressBar.setVisibility(View.GONE);
+            }
 
-
+            @Override
+            public void onError(Exception e) {
+                alertOrToastMsg.showAlert("Error", e.getMessage());
+            }
+        });
     }
 
     @Override

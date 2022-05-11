@@ -3,6 +3,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!--All the ID's that are present in Catche data-->
+    <string name="InstituteID">Ins_id</string>
+    <string name="StudentID">Stu_id</string>
+    <string name="TeacherID">Tch_id</string>
+    <string name="OwnerName">Owner_name</string>
+    <string name="StudentName">Student_Name</string>
+    <!--End-->
+
     <string-array name="className">
         <item>Select Class</item>
         <item>Add Class</item>
@@ -12,4 +20,5 @@
         <item>Select Subject</item>
         <item>Add Subject</item>
     </string-array>
+
 </resources>

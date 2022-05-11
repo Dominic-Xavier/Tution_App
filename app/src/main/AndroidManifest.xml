@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TutionApp">
         <activity
+            android:name=".AddNotes"
+            android:exported="false" />
+        <activity
+            android:name=".LiveClasses"
+            android:exported="false" />
+        <activity
             android:name="com.fileViewer.PDFViewer"
             android:exported="false" />
         <activity

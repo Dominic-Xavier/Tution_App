@@ -87,7 +87,7 @@
                 android:minWidth="100dp"
                 android:minHeight="100dp"
                 android:drawableTop="@drawable/icons8_downloads_folder_64"
-                android:text="Downloads"/>
+                android:text="Study Materials"/>
         </TableRow>
     </TableLayout>
 

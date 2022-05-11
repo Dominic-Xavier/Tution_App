@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.tutionapp"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -58,6 +58,7 @@ dependencies {
     implementation 'com.github.MikeOrtiz:TouchImageView:1.4.1'
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation ('org.jitsi.react:jitsi-meet-sdk:5.0.2') { transitive = true }
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

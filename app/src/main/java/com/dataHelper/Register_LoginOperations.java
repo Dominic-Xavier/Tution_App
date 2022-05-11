@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.student.Student;
+import com.tutionapp.R;
 import com.tutionapp.TutionActivity;
 
 import org.jetbrains.annotations.NotNull;
@@ -235,6 +236,7 @@ public class Register_LoginOperations {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                 String Instutute_id = dataSnapshot.child("ins_id").getValue(String.class);
+                String OwnerName = dataSnapshot.child("Institute_Name").getValue(String.class);
                 String passWord = dataSnapshot.child("Password").getValue(String.class);
                 System.out.println("Login Data:-"+Instutute_id+" : "+passWord);
                 if(Instutute_id==null){
@@ -244,7 +246,10 @@ public class Register_LoginOperations {
 
                 if(password.equals(passWord) && userID.equals(Instutute_id)){
                     context.startActivity(new Intent(context, TutionActivity.class));
-                    CatcheData.setData("Ins_id",Instutute_id, context);
+                    String keyInstituteID = context.getResources().getString(R.string.InstituteID);
+                    String keyOwnerName = context.getResources().getString(R.string.OwnerName);
+                    CatcheData.setData(keyInstituteID,Instutute_id, context);
+                    CatcheData.setData(keyOwnerName, OwnerName, context);
                     ((Activity)context).finish();
                 }
                 else
@@ -325,14 +330,15 @@ public class Register_LoginOperations {
         Institute_Reference.child(ins_id).child(Node.Student.toString()).child(Student_ID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Object obj = dataSnapshot.getValue();
                 try {
                     String StudentID = dataSnapshot.child("Student_ID").getValue(String.class);
                     String Ins_ID = dataSnapshot.child("Ins_ID").getValue(String.class);
                     String passWord = dataSnapshot.child("Password").getValue(String.class);
+                    String keyStudentID = context.getResources().getString(R.string.StudentID);
+                    String keyInstituteID = context.getResources().getString(R.string.InstituteID);
                     if(Student_ID.equals(StudentID) && ins_id.equals(Ins_ID) && pass.equals(passWord)){
-                        CatcheData.setData("Stu_id",StudentID, context);
-                        CatcheData.setData("Ins_id", Ins_ID, context);
+                        CatcheData.setData(keyStudentID,StudentID, context);
+                        CatcheData.setData(keyInstituteID, Ins_ID, context);
                         context.startActivity(new Intent(context, Student.class));
                         ((Activity)context).finish();
                     }

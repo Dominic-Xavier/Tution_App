@@ -139,10 +139,8 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
             intent.putExtra("studentID", ids);
             startActivity(intent);
         }
-        else if(task.equals("Attendance")){
-            intent = new Intent(this, FeesDetails.class);
-            intent.putExtra("studentID", ids);
-            startActivity(intent);
+        else if(task.equals("Notes")){
+
         }
         else {
             intent = new Intent(this, StudentDetailsActivity.class);

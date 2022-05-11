@@ -37,23 +37,7 @@ public class CatcheData {
 
     public static String getData(String key, Context context){
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String result;
-        switch (key){
-            case "Ins_id":{
-                result = sharedPreferences.getString("Ins_id",null);
-                break;
-            }
-            case "Stu_id":{
-                result =  sharedPreferences.getString("Stu_id",null);
-                break;
-            }
-            case "Tch_id":{
-                result =  sharedPreferences.getString("Tch_id",null);
-                break;
-            }
-            default:
-                throw new IllegalStateException("Unexpected value: " + key);
-        }
+        String result = sharedPreferences.getString(key,null);
         return result;
     }
 }

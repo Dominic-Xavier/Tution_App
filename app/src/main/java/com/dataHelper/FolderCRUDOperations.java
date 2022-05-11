@@ -1,9 +1,12 @@
 package com.dataHelper;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.OpenableColumns;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ProgressBar;
@@ -31,7 +34,6 @@ public class FolderCRUDOperations implements FileListener {
     Context context;
     String ins_id;
     AlertOrToastMsg alertOrToastMsg;
-    static List<Uri> uriList;
     Intent intent;
     ProgressBar progressBar;
 
@@ -49,13 +51,34 @@ public class FolderCRUDOperations implements FileListener {
         });
     }
 
+    public void insertData(List<Uri> uris, RecyclerView recyclerView){
+        StorageReference storageReference = DatabaseLinks.getInstituteRef(ins_id);
+
+        if(uris!=null){
+            recyclerView.setVisibility(View.GONE);
+            for (Uri uri : uris) {
+                String imageName = getFileName(uri);
+                storageReference.child(imageName).putFile(uri).addOnSuccessListener((UploadTask.TaskSnapshot taskSnapshot) -> {
+                    getAllFiles(recyclerView);
+                    alertOrToastMsg.ToastMsg("File saved Successfully....!");
+                }).addOnFailureListener((@NonNull Exception e) -> {
+                    alertOrToastMsg.showAlert("Error", e.getMessage());
+                });
+                progressBar.setVisibility(View.GONE);
+            }
+
+        }
+        else
+            progressBar.setVisibility(View.GONE);
+
+    }
+
     public void insertData(Uri uri, RecyclerView recyclerView){
         StorageReference storageReference = DatabaseLinks.getInstituteRef(ins_id);
-        long milliSec =  System.currentTimeMillis();
 
         if(uri!=null){
             recyclerView.setVisibility(View.GONE);
-            String imageName = milliSec+"."+getFileExtension(uri);
+            String imageName = getFileName(uri);
             storageReference.child(imageName).putFile(uri).addOnSuccessListener((UploadTask.TaskSnapshot taskSnapshot) -> {
                 getAllFiles(recyclerView);
                 alertOrToastMsg.ToastMsg("File saved Successfully....!");
@@ -72,12 +95,11 @@ public class FolderCRUDOperations implements FileListener {
     public void getAllFiles(RecyclerView recyclerView){
         StorageReference storageReference = DatabaseLinks.getInstituteRef(ins_id);
         storageReference.listAll().addOnSuccessListener((ListResult listResult) -> {
-            uriList = new ArrayList<>();
             for (StorageReference fileRef : listResult.getItems()) {
                 recyclerView.setVisibility(View.VISIBLE);
                 fileRef.getDownloadUrl().addOnSuccessListener((Uri uri) -> {
-                    uriList.add(uri);
-                    StudyMaterials.recyclerViewAdapter(context, uriList, FolderCRUDOperations.this::onClick, recyclerView);
+                    String name = DatabaseLinks.getStorageRef().getReferenceFromUrl(String.valueOf(uri)).getName();
+                    StudyMaterials.recyclerViewAdapter(context, uri, name, FolderCRUDOperations.this::onClick, recyclerView);
                 });
             }
             //StudyMaterials.recyclerViewAdapter(context, uriList, FolderCRUDOperations.this::onClick);
@@ -90,7 +112,7 @@ public class FolderCRUDOperations implements FileListener {
         });
     }
 
-    public void getAllFiles(String path){
+    public void getAllFiles(String path, RecyclerView recyclerView){
         StorageReference storageReference = DatabaseLinks.getInstituteRef(ins_id);
     }
 
@@ -118,24 +140,48 @@ public class FolderCRUDOperations implements FileListener {
 
     @Override
     public void onClick(Uri uri) {
-        if(getMimeType(uri).split("/")[0].equals("image")){
-            alertOrToastMsg.ToastMsg("URI Clicked"+uri.toString());
+        String fileType = getMimeType(uri).split("/")[0];
+        String fileType1 = getMimeType(uri).split("/")[1];
+        if(fileType.equals("image")){
+            alertOrToastMsg.ToastMsg("URI Clicked"+fileType);
             intent = new Intent(context, ImageViewer.class);
             intent.putExtra("image", uri.toString());
             context.startActivity(intent);
         }
-        else if(getMimeType(uri).split("/")[0].equals("video")){
-            alertOrToastMsg.ToastMsg("URI Clicked"+uri.toString());
+        else if(fileType.equals("video")){
+            alertOrToastMsg.ToastMsg("URI Clicked"+fileType);
             intent = new Intent(context, VideoViewer.class);
             intent.putExtra("video", uri.toString());
             context.startActivity(intent);
         }
 
-        else if(getMimeType(uri).split("/")[1].equals("pdf")){
-            alertOrToastMsg.ToastMsg("PDF Clicked"+uri.toString());
+        else if(fileType1.equals("pdf")){
+            alertOrToastMsg.ToastMsg("PDF Clicked"+fileType1);
             intent = new Intent(context, PDFViewer.class);
             intent.putExtra("pdf", uri.toString());
             context.startActivity(intent);
         }
+    }
+
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 }

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DownloadManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -50,14 +51,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StudyMaterials extends AppCompatActivity implements Folder {
+public class StudyMaterials extends AppCompatActivity implements Folder, FileListener {
 
     private FloatingActionButtonExpandable actionButtonExpandable;
     private AlertDialog.Builder builder;
     private LinearLayout linearLayout;
     private static RecyclerView gridView;
     private List<String> folderNAme;
-
     private static AlertOrToastMsg alertOrToastMsg;
     private static final Map<String, List<String>> folders = new HashMap<>();
     private Handler handler;
@@ -139,7 +139,10 @@ public class StudyMaterials extends AppCompatActivity implements Folder {
                             String folderName = editText.getText().toString();
                             if(folderName.isEmpty() || folderName==null)
                                 alertOrToastMsg.ToastMsg("Folder cannot be empty...!");
-                            else
+                            else{
+                                recyclerViewAdapter(StudyMaterials.this, getUriToDrawable(StudyMaterials.this, R.drawable.ic_baseline_folder_64),
+                                        folderName, StudyMaterials.this::onClick, gridView);
+                            }
                                 folderNAme.add(folderName);
                             //folderAdapter = new FolderAdapter(StudyMaterials.this, folderNAme);
                             linearLayout.removeAllViews();
@@ -223,10 +226,16 @@ public class StudyMaterials extends AppCompatActivity implements Folder {
 
 
 
-    public static void recyclerViewAdapter(Context context, List<Uri> list, FileListener fileListener, RecyclerView recyclerView){
-        FolderAdapter folderAdapter  = new FolderAdapter(context, list, fileListener);
+    public static void recyclerViewAdapter(Context context, Uri list, String FileName, FileListener fileListener, RecyclerView recyclerView){
+
+        FolderAdapter folderAdapter  = FolderAdapter.getInstance(context, list, FileName, fileListener);
         recyclerView.setAdapter(folderAdapter);
         gridLayoutManager = new GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
+    }
+
+    @Override
+    public void onClick(Uri uri) {
+
     }
 }

@@ -44,7 +44,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull RecyclerViewAdapter.Viewholder holder, int position) {
-        holder.studentName.setText(students.get(position));
+        String student = students.get(position);
+        holder.studentName.setText(student);
         holder.phoneNumber.setText(studentsPhoneNumbers.get(position));
     }
 
@@ -72,7 +73,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @FunctionalInterface
-    public interface OnStudentListner{
+    public interface OnStudentListner {
         void onClick(int position);
     }
 }

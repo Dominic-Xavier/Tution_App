@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class list2 extends Fragment {
 
-    private AppCompatButton assignTask, downloads;
+    private AppCompatButton assignTask, downloads, liveClass;
     Intent intent;
 
     public list2() {
@@ -35,6 +35,7 @@ public class list2 extends Fragment {
 
         assignTask = getView().findViewById(R.id.assignTask);
         downloads = getView().findViewById(R.id.downloads);
+        liveClass = getView().findViewById(R.id.liveClass);
 
         assignTask.setOnClickListener((v)-> {
             intent = new Intent(getActivity(), AllStudentsList.class);
@@ -44,6 +45,11 @@ public class list2 extends Fragment {
 
         downloads.setOnClickListener((v) -> {
             intent = new Intent(getActivity(), StudyMaterials.class);
+            startActivity(intent);
+        });
+
+        liveClass.setOnClickListener((v) -> {
+            intent = new Intent(getActivity(), LiveClasses.class);
             startActivity(intent);
         });
     }

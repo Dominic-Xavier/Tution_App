@@ -6,5 +6,6 @@ public enum Node {
     Institutes,
     Teacher,
     Subject,
-    Attendance
+    Attendance,
+    Notes
 }

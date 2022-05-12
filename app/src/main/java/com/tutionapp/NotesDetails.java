@@ -23,11 +23,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.common.AlertOrToastMsg;
+import com.dataHelper.CatcheData;
+import com.dataHelper.NotesCRUDOperations;
 import com.google.android.material.textfield.TextInputEditText;
 import com.recyclerViewAdapters.RecyclerViewAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class NotesDetails extends Fragment  {
@@ -35,10 +39,10 @@ public class NotesDetails extends Fragment  {
     Toolbar toolbar;
     AlertOrToastMsg alertOrToastMsg;
     TextInputEditText title, notes;
-    private static final List<String> titleList = new ArrayList<>();
-    private static final List<String> notesList = new ArrayList<>();
     GetNotesData getData;
     Intent intent;
+    NotesCRUDOperations notesCRUDOperations;
+    Map<String, Object> map = new HashMap<>();
 
     public NotesDetails() {
         // Required empty public constructor
@@ -71,9 +75,9 @@ public class NotesDetails extends Fragment  {
             case R.id.done:
                 String getTitle = title.getText().toString();
                 String getNotes = notes.getText().toString();
-                titleList.add(getTitle);
-                notesList.add(getNotes);
-                getData.getNotesData(titleList, notesList);
+                map.put("Title", getTitle);
+                map.put("Description", getNotes);
+                getData.getNotesData(getTitle, getNotes);
             break;
 
             case R.id.mic:
@@ -98,6 +102,7 @@ public class NotesDetails extends Fragment  {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notes_details, container, false);
+        notesCRUDOperations = new NotesCRUDOperations(getActivity(), CatcheData.getData("Ins_id", getContext()), AddNotes.getProgressBar());
         alertOrToastMsg = new AlertOrToastMsg(view.getContext());
         AppCompatActivity compatActivity = (AppCompatActivity) getActivity();
         toolbar = view.findViewById(R.id.toolBar);
@@ -109,7 +114,7 @@ public class NotesDetails extends Fragment  {
     }
 
     @FunctionalInterface
-    interface GetNotesData{
-        void getNotesData(List<String> title, List<String> notes);
+    public interface GetNotesData{
+        void getNotesData(String title, String notes);
     }
 }

@@ -21,4 +21,9 @@ public class DatabaseLinks {
         StorageReference storageRef = storageReference.child(ins_id);
         return storageRef;
     }
+
+    public static DatabaseReference getDatabaseRef(String ins_id){
+        DatabaseReference reference = baseReference.child(ins_id);
+        return reference;
+    }
 }

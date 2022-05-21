@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    card_view:cardCornerRadius="4dp"
+    android:elevation="5dp">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/feeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/fee_year_and_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="year"
+            android:textSize="25dp"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/fee_paid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fee Paid"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12dp"
+                android:autoSizeMaxTextSize="100dp"
+                android:autoSizeStepGranularity="2dp"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/fee_received"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fee Received"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12dp"
+                android:autoSizeMaxTextSize="100dp"
+                android:autoSizeStepGranularity="2dp"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/fee_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fee Balance"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12dp"
+                android:autoSizeMaxTextSize="100dp"
+                android:autoSizeStepGranularity="2dp"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.cardview.widget.CardView>

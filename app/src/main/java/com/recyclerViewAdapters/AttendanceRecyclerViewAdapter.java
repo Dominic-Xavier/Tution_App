@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.common.AlertOrToastMsg;
@@ -99,7 +100,7 @@ public class AttendanceRecyclerViewAdapter extends RecyclerView.Adapter<Attendan
 
     class Viewholder extends RecyclerView.ViewHolder {
 
-        TextView studentName, studentID, date;
+        AppCompatTextView studentName, studentID, date;
         RadioGroup radioGroup;
         AppCompatRadioButton present, absent, late;
 

@@ -196,18 +196,15 @@ public class TaskDetails implements TeacherRecyclerAdapter.OnTask, TopicListener
     }
 
     public void deleteTasks(List<String> topicIds, String stu_id, RecyclerView recyclerView){
-        studentReference.child(insID).child(Node.Student.toString()).child(stu_id).child("Task").
+        studentReference.child(insID).child(Node.Student.toString()).child(stu_id).child(Node.Task.toString()).
                 addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     for (String ids:topicIds) {
                         if(ids.equals(snapshot.getKey())){
-                            snapshot.getRef().removeValue(new DatabaseReference.CompletionListener() {
-                                @Override
-                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                    alertOrToastMsg.ToastMsg("Deleted "+ids+" Successfully...!");
-                                }
+                            snapshot.getRef().removeValue((@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) -> {
+                                alertOrToastMsg.ToastMsg("Deleted "+ids+" Successfully...!");
                             });
                         }
                     }

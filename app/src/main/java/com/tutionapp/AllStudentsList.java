@@ -29,7 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class AllStudentsList extends AppCompatActivity implements RecyclerViewAdapter.OnStudentListner {
+public class AllStudentsList extends AppCompatActivity implements RecyclerViewAdapter.OnStudentListener {
 
     private static RecyclerView recyclerView;
     private static RecyclerViewAdapter recyclerViewAdapter;
@@ -71,8 +71,9 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
 
     }
 
-    public static void recyclerView(Context context, List<String> names, List<String> phoneNumbers, RecyclerViewAdapter.OnStudentListner onStudentListner, RecyclerView recyclerView) {
-        recyclerViewAdapter = new RecyclerViewAdapter(context, names, phoneNumbers, onStudentListner);
+    public static void recyclerView(Context context,List<String> stu_ids , List<String> names, List<String> phoneNumbers,
+                                    RecyclerViewAdapter.OnStudentListener onStudentListner, RecyclerView recyclerView) {
+        recyclerViewAdapter = new RecyclerViewAdapter(context,stu_ids, names, phoneNumbers, onStudentListner);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
     }
@@ -96,7 +97,7 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
                         studentPhoneNumbers.add(phone_Number);
                         studentIDs.add(student_ID);
                     }
-                    recyclerView(AllStudentsList.this, studentNames, studentPhoneNumbers, AllStudentsList.this::onClick, recyclerView);
+                    recyclerView(AllStudentsList.this,studentIDs , studentNames, studentPhoneNumbers, AllStudentsList.this, recyclerView);
                     map.put("StudentNames", studentNames);
                     map.put("StudentPhoneNumbers", studentPhoneNumbers);
                     map.put("Student_IDs", studentIDs);
@@ -147,6 +148,11 @@ public class AllStudentsList extends AppCompatActivity implements RecyclerViewAd
             intent.putExtra("studentID", ids);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void selectedData(List<String> selectedData) {
+
     }
 
     @Override

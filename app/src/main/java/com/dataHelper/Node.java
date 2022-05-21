@@ -7,5 +7,6 @@ public enum Node {
     Teacher,
     Subject,
     Attendance,
-    Notes
+    Notes,
+    Task
 }

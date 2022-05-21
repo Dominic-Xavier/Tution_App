@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TutionApp">
         <activity
+            android:name=".DisplayFees"
+            android:exported="false" />
+        <activity
             android:name=".AddNotes"
             android:exported="false" />
         <activity

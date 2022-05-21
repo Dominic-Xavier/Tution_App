@@ -7,41 +7,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".FeesDetails">
 
-    <TextView
-        android:id="@+id/textView4"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/appCompatTextView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:text="Fee Details"
-        android:textSize="20dp"
+        android:textSize="30dp"
         android:textStyle="bold"
-        android:layout_margin="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/displayFeeDetails"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:background="@color/white"
-        android:backgroundTint="@color/white"
-        android:hint="Fee Details"
-        style = "@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4">
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAlignment="center"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!--<Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />-->
+        app:layout_constraintTop_toBottomOf="@+id/appCompatTextView4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

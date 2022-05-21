@@ -41,7 +41,6 @@ public class NotesDetails extends Fragment  {
     TextInputEditText title, notes;
     GetNotesData getData;
     Intent intent;
-    NotesCRUDOperations notesCRUDOperations;
     Map<String, Object> map = new HashMap<>();
 
     public NotesDetails() {
@@ -75,9 +74,14 @@ public class NotesDetails extends Fragment  {
             case R.id.done:
                 String getTitle = title.getText().toString();
                 String getNotes = notes.getText().toString();
-                map.put("Title", getTitle);
-                map.put("Description", getNotes);
-                getData.getNotesData(getTitle, getNotes);
+                if(getTitle.isEmpty() || getNotes.isEmpty()){
+                    alertOrToastMsg.ToastMsg("Title or Notes is missing");
+                }
+                else{
+                    map.put("Title", getTitle);
+                    map.put("Description", getNotes);
+                    getData.getNotesData(getTitle, getNotes);
+                }
             break;
 
             case R.id.mic:
@@ -102,7 +106,6 @@ public class NotesDetails extends Fragment  {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notes_details, container, false);
-        notesCRUDOperations = new NotesCRUDOperations(getActivity(), CatcheData.getData("Ins_id", getContext()), AddNotes.getProgressBar());
         alertOrToastMsg = new AlertOrToastMsg(view.getContext());
         AppCompatActivity compatActivity = (AppCompatActivity) getActivity();
         toolbar = view.findViewById(R.id.toolBar);

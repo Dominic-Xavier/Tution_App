@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".AddNotes">
 
+    <include
+        android:id="@+id/notesTaskBar"
+        layout="@layout/custom_taskbar"
+        android:layout_margin="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+
     <ProgressBar
         android:id="@+id/notesProgress"
         android:layout_width="wrap_content"
@@ -14,14 +24,14 @@
         app:layout_constraintBottom_toTopOf="@+id/newNotes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/notesTaskBar" />
 
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="gone"
         android:layout_margin="10dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/newNotes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +46,7 @@
         app:layout_constraintBottom_toTopOf="@+id/newNotes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/notesTaskBar" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/newNotes"
@@ -61,7 +71,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -53,7 +53,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         return folderAdapter;
     }
 
-    public FolderAdapter(Context context, List<Uri> uris, List<String> FileNames, FileListener fileListener){
+    private FolderAdapter(Context context, List<Uri> uris, List<String> FileNames, FileListener fileListener){
         this.uris = uris;
         this.context = context;
         alertOrToastMsg = new AlertOrToastMsg(context);

@@ -116,7 +116,7 @@ public class Teacher_task extends AppCompatActivity {
                         txtDescription = txtTextArea.getText().toString();
                         txtSubject = subject.getText().toString();
 
-                        task.put("DateFunctions", txtdates);
+                        task.put("Date", txtdates);
                         task.put("Topic", txttitle);
                         task.put("Description", txtDescription);
                         task.put("Subject", txtSubject);
